@@ -17,13 +17,13 @@
     <script src='deps/jquery.js'></script>
     <script src='deps/jquery-imagesloaded.js'></script>
     <script src='deps/jquery-scrollto.js'></script>
-    <script src='../dist/jquery-tourbus.min.js'></script>
+    <script src='jquery-tourbus.min.js'></script>
 
     <script src='highlight.js'></script>
     <script src='demo.js'></script>
 
     <link href='skeleton.css' media='all' rel='stylesheet' type='text/css' />
-    <link href='../dist/jquery-tourbus.min.css' media='all' rel='stylesheet' type='text/css' />
+    <link href='jquery-tourbus.min.css' media='all' rel='stylesheet' type='text/css' />
     <link href='demo.css' media='all' rel='stylesheet' type='text/css' />
   </head>
   <body>
@@ -43,12 +43,12 @@
         </p>
 
         <p>
-          Well, too bad for you! I was using Joyride but the version bundled
-          with <a href='http://foundation.zurb.com/' target='_blank'>Foundation 4</a>
-          changed a bunch and I didn't like it at all. It's a bit hard to describe
-          and not really relevant why that is... it will suffice to say I
-          figured it couldn't be too hard to hack together a pretty full-featured
-          tour plugin.
+          Well, too bad for you! I wanted a simpler, less things-happen-automatically
+          toolkit for making tours. If I need auto-advance/progress between 'legs'
+          (<small>get it, legs of the tour :)</small>) I just need some callbacks where
+          I can write my <tt>setTimeout</tt>s. If I want to highlight some elements,
+          I just write some styles to do that and apply them appropriately.
+          I much prefer this approach, maybe you do too :)
         </p>
 
         <div id='tour-info'>
@@ -64,29 +64,31 @@
               <tr>
                 <th nowrap>Download Source:</th>
                 <td>
-                  <a class='button half-bottom' target='_blank' id='coffee-dl' href='../src/jquery-tourbus.coffee'>coffeescript</a>
+                  <a class='button half-bottom' target='_blank' id='coffee-dl' href='https://raw.github.com/rfunduk/jquery-tourbus/master/src/jquery-tourbus.coffee'>coffeescript</a>
                   <br/>
-                  <a class='button half-bottom' target='_blank' id='plain-dl' href='../dist/jquery-tourbus.js'>javascript</a>
+                  <a class='button half-bottom' target='_blank' id='plain-dl' href='https://github.com/rfunduk/jquery-tourbus/raw/master/dist/jquery-tourbus.js'>javascript (14k)</a>
                   <br/>
-                  <a class='button half-bottom' target='_blank' id='minified-dl' href='../dist/jquery-tourbus.min.js'>minified js</a>
+                  <a class='button half-bottom' target='_blank' id='minified-dl' href='https://raw.github.com/rfunduk/jquery-tourbus/master/dist/jquery-tourbus.min.js'>minified (8k)</a>
                 </td>
               </tr>
               <tr class='sep'>
-                <th nowrap>Download CSS:</th>
+                <th nowrap>Download Styles:</th>
                 <td id='css'>
-                  <a class='button half-bottom' target='_blank' href='../src/jquery-tourbus.less'>less</a>
+                  <a class='button half-bottom' target='_blank' href='https://raw.github.com/rfunduk/jquery-tourbus/master/src/jquery-tourbus.less'>less</a>
                   <br/>
-                  <a class='button half-bottom' target='_blank' href='../dist/jquery-tourbus.css'>css</a>
+                  <a class='button half-bottom' target='_blank' href='https://github.com/rfunduk/jquery-tourbus/raw/master/dist/jquery-tourbus.css'>css</a>
                   <br/>
-                  <a class='button half-bottom' target='_blank' href='../dist/jquery-tourbus.min.css'>minified css</a>
+                  <a class='button half-bottom' target='_blank' href='https://github.com/rfunduk/jquery-tourbus/raw/master/dist/jquery-tourbus.min.css'>minified</a>
                 </td>
               </tr>
               <tr class='sep'>
                 <th nowrap>Dependencies:</th>
                 <td id='deps'>
                   <a class='button half-bottom' target='_blank' href='http://jquery.com/'>jQuery</a>
-                  <a class='button half-bottom' target='_blank' href='http://flesler.blogspot.ca/2007/10/jqueryscrollto.html'>jQuery-scrollTo</a>
-                  <a class='button half-bottom' target='_blank' href='http://desandro.github.com/imagesloaded/'>jQuery-imagesLoaded</a>
+                  <br/>
+                  <a class='button half-bottom optional' target='_blank' href='http://flesler.blogspot.ca/2007/10/jqueryscrollto.html'>jQuery-scrollTo</a>
+                  <br/>
+                  <a class='button half-bottom optional' target='_blank' href='http://desandro.github.com/imagesloaded/'>jQuery-imagesLoaded</a>
                 </td>
               </tr>
             </table>
@@ -94,23 +96,36 @@
         </div>
 
         <p>
-          Indeed, it wasn't especially hard. It probably took more time to
-          make this website than to implement the main bits of the plugin.
-          It takes the approach that you are a developer &ndash; a decent one &ndash;
-          and you just want to run a couple little popups attached to some
-          key elements in your interface, probably with buttons to navigate
-          between them (or maybe do it programmatically at times with delays and
-          stuff like that).
+          A word about dependencies:
+          <a href='http://jquery.com/' target='_blank'>jQuery</a>
+          is the only hard dependency, and I expect
+          it will be fairly straight-forward to support
+          <a href='' target='_blank'>Zepto</a> as well. <tt>scrollTo</tt>
+          and <tt>imagesLoaded</tt> are optional and depend on what you're trying
+          to do and how your tour leg are implemented. See the
+          <a href='javascript:void(0);' class='docs-tour'>docs</a> for more on that.
         </p>
 
+        <h4>Motivations</h4>
         <p>
-          So, to put it straight. If you want auto navigation between all
-          (or certain) 'legs' &ndash; just write some javascript to do it!
-          If you want the targets of all (or certain) 'legs' to be highlighted
-          in some way &ndash; write some JS! If you want the browser to
-          remember where the user was in the tour &ndash; write some JS!
-          If you want animation in/out of legs, yep &ndash; write some JS!
+          jQuery TourBus does not <em>need</em> to exist, there are so
+          many plugins that do exact this already, aren't there?
         </p>
+        <ul id='alternatives' style='margin-right: 200px;'>
+          <li><a href='http://www.zurb.com/playground/jquery-joyride-feature-tour-plugin' class='remove-bottom' target='_blank'>ZURB Foundation Joyride</a></li>
+          <li><a href='http://jquerytour.com/' class='remove-bottom' target='_blank'>jQuery Site Tour</a></li>
+          <li>
+            Actually there are just too many to list, here's 10:<br/>
+            <a href='http://www.jquery4u.com/plugins/web-tour-instructional-plugins/' target='_blank'>10 jQuery web tour, help and instructional plugins</a>...
+          </li>
+        </ul>
+        <p>
+          You know how it is, I just didn't really like them. Either too much configuration
+          in the DOM, or not enough. Confusing disregard for the simplicity of
+          event-driven APIs. A ton of styles and animation that results in performance
+          problems. All of these things ultimately stem from trying to do too much automatically.
+        </p>
+
         <a class='start-intro-tour button'>Start the Demo Tour <span>&raquo;</span></a>
 
 
@@ -118,31 +133,13 @@
           <h1>Documentation</h1>
           <div id='inner-docs'>
             <p>
-              jQuery TourBus does not <em>need</em> to exist, there are so
-              many plugins that do exact this already, aren't there?
-            </p>
-            <ul style='margin-right: 180px;'>
-              <li><a href='http://www.zurb.com/playground/jquery-joyride-feature-tour-plugin' class='remove-bottom' target='_blank'>ZURB Foundation Joyride</a></li>
-              <li><a href='http://jquerytour.com/' class='remove-bottom' target='_blank'>jQuery Site Tour</a></li>
-              <li>
-                Actually there are just too many to list, here's 10:<br/>
-                <a href='http://www.jquery4u.com/plugins/web-tour-instructional-plugins/' target='_blank'>10 jQuery web tour, help and instructional plugins</a>...
-              </li>
-            </ul>
-            <p>
-              You know how it is, I just didn't really like them. Either too much configuration
-              in the DOM, or not enough. Confusing disregard for the simplicity of
-              event-driven APIs. A ton of styles and animation that results in performance
-              problems.
-            </p>
-            <p>
-              All of these things ultimately stem from trying to do too much automatically.
-              You're a developer, right? So jQuery TourBus takes more of a toolkit approach
+              jQuery TourBus takes more of a toolkit approach
               than some of the alternatives that try to have focusing elements, auto-progress
-              with timers and indicators, on and on... too much stuff! <strong>Less is more!</strong>
+              with timers and indicators, on and on, all built in... too much stuff!
+              <strong>Less is more!</strong>
             </p>
 
-            <div class='row'>
+            <div class='row' id='docs-container'>
               <div class='five columns alpha'>
                 <ul class='docs-nav'>
                   <lh>Basic Usage</lh>
@@ -162,6 +159,7 @@
                   <lh>Miscellaneous</lh>
                   <li><a href='#convenience-classes'>Leg Convenience Classes</a></li>
                   <li><a href='#css-stuff'>Leg CSS</a></li>
+                  <li><a href='#images'>Notes about Images</a></li>
                 </ul>
                 <ul class='docs-nav'>
                   <lh>Advanced Usage</lh>
@@ -170,6 +168,7 @@
                   <li><a href='#example-1'>Example: Auto-progress</a></li>
                   <li><a href='#example-2'>Example: Show Multiple</a></li>
                   <li><a href='#example-3'>Example: Animate in/out</a></li>
+                  <li><a href='#example-4'>Example: Highlight Target</a></li>
                 </ul>
               </div>
             </div>
@@ -314,6 +313,9 @@ tour.data('tourbus').depart();
             <p>
               A tour is made up of 'legs', so there is an instance
               for each of those as well. Here are the methods on <tt>Leg</tt>.
+              <br/><small><strong>Note:</strong> You should not need to call
+              these methods yourself unless doing custom stuff. See
+              <a href='#convenience-classes'>convenience classes</a>.</small>
             </p>
 
             <table class='docs'>
@@ -322,14 +324,12 @@ tour.data('tourbus').depart();
                 <td>
                   Generate markup for this leg and insert it into the
                   DOM, replacing any that already exists.
-                  <br/><small>You should not need to call this yourself.</small>
                 </td>
               </tr>
               <tr>
                 <th><tt>destroy</tt></th>
                 <td>
                   Remove this leg from the DOM and unbind event handlers.
-                  <br/><small>You should not need to call this yourself.</small>
                 </td>
               </tr>
               <tr>
@@ -337,7 +337,6 @@ tour.data('tourbus').depart();
                 <td>
                   Set the position of this leg (its physical position
                   on the page).
-                  <br/><small>You should not need to call this yourself.</small>
                 </td>
               </tr>
               <tr>
@@ -345,7 +344,6 @@ tour.data('tourbus').depart();
                 <td>
                   Scroll the page, if possible, so that this leg is in view,
                   and according to it's various settings (such as <tt>context</tt>).
-                  <br/><small>You should not need to call this yourself.</small>
                 </td>
               </tr>
               <tr>
@@ -454,10 +452,10 @@ tour.data('tourbus').depart();
 
             <a name='leg-options'></a>
             <p>
-              You don't always want to only use globals that affect
+              You don't often want to only use globals that affect
               every single leg... so you can specify the above 'leg' options
               on a per-leg basis. This is done in the markup with
-              <tt>data-</tt> attributes. Here's all of them,
+              <tt>data-*</tt> attributes. Here's all of them,
               they match up with the global defaults above pretty obviously.
               Only the first one is special and usually required, it
               defines the target of the leg (what it should point to/be near):
@@ -556,9 +554,7 @@ tour.data('tourbus').depart();
             <p>
               Any element with one of these convenience classes will perform the
               associated action when clicked &ndash; easy.
-              For more fine-grained control, simply bind your own
-              event handlers.
-            </p>
+            <p>
 
             <table class='docs'>
               <tr>
@@ -576,6 +572,9 @@ tour.data('tourbus').depart();
             </table>
 
             <p>
+              For more fine-grained control, simply bind your own
+              event handlers.
+            <p>
               <strong>Note:</strong>
               However, since the elements you want to bind event handlers to
               aren't in the DOM yet, you'll probably want to use this handy
@@ -586,7 +585,7 @@ tour.data('tourbus').depart();
 var tourbus = $('#my-tour').data('tourbus');
 tourbus.on( 'click', 'selector', function() {
   // handle click on element matching selector
-  // _inside a tour leg_
+  // _inside any tour leg_
 } );
             </script>
 
@@ -638,6 +637,9 @@ tourbus.on( 'click', 'selector', function() {
 
             <p>
               Hopefully changing colors here is self explanatory.
+              Even better would be to use the LESS version as it
+              uses variables for colors (and the margins described above)
+              and is more succinct and easier to read.
             </p>
 
             <h2>Advanced Usage</h2>
@@ -645,6 +647,41 @@ tourbus.on( 'click', 'selector', function() {
             <p>
               Here's some example code and suggestions on how
               you might implement some advanced use-cases.
+            </p>
+
+            <a name='images'></a>
+            <h3>Notes about Using Images</h3>
+
+            <p>
+              At times you'll want to put images either in your legs
+              themselves, or in your document and target them with legs.
+              If you do, you'll notice that the positioning is probably
+              all wrong, and that's because at the time of the calculations
+              for positioning the popups the images are not likely to be
+              loaded yet.
+            </p>
+
+            <p>
+              I recommend you use
+              <strong><a href='http://desandro.github.com/imagesloaded/' target='_blank'>jQuery-imagesLoaded</a></strong>
+              to solve this problem. Simply wrap your entire tour initialization
+              in a call to <tt>imagesLoaded</tt>:
+            </p>
+
+            <script class='highlight' data-language='javascript' type='text/highlight'>
+$(document).ready( function() {
+  $('img').imagesLoaded( function() {
+    var tour = $('#my-tour-id').tourbus( {} );
+  } );
+} );
+            </script>
+
+            <p>
+              Now your tour won't get setup at all until the images are loaded.
+              You will probably need this any time the layout of the page is determined
+              by the size of the loading images. If you've got more of an application
+              where things are static sizes/positions and images just load into that
+              layout (icons and the like) then you're probably ok.
             </p>
 
             <a name='custom-properties'></a>
@@ -661,6 +698,11 @@ tourbus.on( 'click', 'selector', function() {
               This uses jQuery conventions. The property
               <tt>data-some-custom-property</tt> will be available in
               <tt>rawData</tt> as <tt>rawData.someCustomProperty</tt>.
+            </p>
+
+            <p>
+              There are a few examples of this below, such as
+              <a href='#example-1'>auto-progress</a> and <a href='#example-4'>highlight/expose</a>.
             </p>
 
             <a name='tourbus-internals'></a>
@@ -848,8 +890,8 @@ $('#my-tour').tourbus( {
             <h3>Animate in or out a leg.</h3>
 
             <p>
-              Lastly, if we want to fade in or do some fancy sliding and
-              stuff of a leg, we can use the <tt>onLegStart</tt> for
+              Say we want to fade in or do some fancy sliding and
+              stuff of a leg. We can use the <tt>onLegStart</tt> for
               animating <em>in</em> and <tt>onLegEnd</tt> for animating
               <em>out</em>.
             </p>
@@ -872,6 +914,68 @@ $('#my-tour').tourbus( {
   }
 } );
             </script>
+
+
+            <a name='example-4'></a>
+            <h3>Highlight/Expose Target Element</h3>
+
+            <p>
+              Lastly, maybe you want to draw a lot more attention to
+              a specific target element as the tour is going on. We want
+              the rest of the page to gray out, and only the element pointed
+              to by this leg to be visible as usual. Easy.
+            </p>
+
+            <p>
+              Let's start with some styles:
+            </p>
+
+            <script class='highlight' data-language='css' type='text/highlight'>
+.my-tour-overlay {
+  display: none;
+  background: #666;
+  opacity: 0.5;
+  z-index: 9997;
+  min-height: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+.my-tour-highlight {
+  background: white;
+  position: relative;
+  border-radius: 4px;
+  box-shadow: inset 0 0 2px rgba( 0, 0, 0, 0.2 );
+  z-index: 9998;
+}
+            </script>
+
+            <p>
+              Next we just write an <tt>onLegStart</tt> and
+              <tt>onLegEnd</tt> handler that applies these styles.
+            </p>
+
+
+            <script class='highlight' data-language='javascript' type='text/highlight'>
+$('#my-tour').tourbus( {
+  onLegStart: function( leg, tourbus ) {
+    if( leg.rawData.highlight ) {
+      leg.$target.addClass('my-tour-highlight');
+      $('.my-tour-overlay').show();
+    }
+  },
+  onLegEnd: function( leg, tourbus ) {
+    if( leg.rawData.highlight ) {
+      leg.$target.removeClass('my-tour-highlight');
+      $('.my-tour-overlay').hide();
+    }
+  }
+} );
+            </script>
+
+            <p>
+              That's it. Simple.
+            </p>
 
           </div>
         </div>
@@ -945,12 +1049,12 @@ $('#my-tour').tourbus( {
               It was written in CoffeeScript, so the plain JavaScript
               may not be to your liking. If that's the case, maybe you could
               just get the
-              <a href='../dist/jquery-tourbus.min.js' target='_blank'>minified version</a>!
+              <a href='https://raw.github.com/rfunduk/jquery-tourbus/master/dist/jquery-tourbus.min.js' target='_blank'>minified version</a>!
             </p>
           </li>
 
           <!-- CSS -->
-          <li data-el='#css' data-width='315' data-orientation='left' data-align='center' data-scroll-to='false'>
+          <li data-el='#css' data-highlight='true' data-width='315' data-orientation='left' data-align='center' data-scroll-to='false'>
             <a href='javascript:void(0);' style='margin-top: 6px; float: right;' class='button remove-bottom tourbus-next'>yep <span>&raquo;</span></a>
             <h3 class='remove-bottom'>Get the CSS...</h3>
           </li>
@@ -988,12 +1092,14 @@ $('#my-tour').tourbus( {
 
         <ol class='tourbus-legs' id='tourbus-demo-2'>
           <!-- INTRO -->
-          <li data-el='#inner-docs' data-and-next='true' data-width='500' data-orientation='top' data-margin='15' data-scroll-context='25'>
+          <li data-el='#inner-docs' data-width='500' data-orientation='top' data-margin='15' data-scroll-context='25'>
             <a href='javascript:void(0);' class='button remove-bottom tourbus-next' style='float: right; margin-top: 8px;'>Cool, thanks.</a>
             <h2 class='remove-bottom'>Documentation</h2>
           </li>
-          <!-- and the sidebar -->
-          <li data-el='#inner-docs ul:first' data-width='280' data-orientation='right' data-align='bottom' data-scroll-to='false' data-margin='20'>
+        </ol>
+
+        <ol class='tourbus-legs' id='tourbus-demo-3'>
+          <li data-el='#alternatives' data-width='280' data-orientation='right' data-align='bottom' data-scroll-to='false' data-margin='0'>
             <h4 class='remove-bottom'>Alternatives!</h4>
             <p class='remove-bottom'>
               Don't get me wrong, some of these tour plugins are good!
@@ -1002,5 +1108,6 @@ $('#my-tour').tourbus( {
         </ol>
       </div>
     </div>
+    <div class='intro-tour-overlay'></div>
   </body>
 </html>

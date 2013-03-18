@@ -3,51 +3,56 @@ $(document).ready( function() {
   $('img').imagesLoaded( function() {
     var info = $('#tour-info');
 
-    $('#tourbus-demo-1').imagesLoaded( function() {
-      $(this).tourbus( {
-        // debug: true,
-        // autoDepart: true,
-        onLegStart: function( leg, tourbus ) {
-          info.html("Intro tour is on leg: " + (leg.index+1));
-
-          // auto-progress where required
-          if( leg.rawData.autoProgress ) {
-            var currentIndex = leg.index;
-            setTimeout(
-              function() {
-                if( tourbus.currentLegIndex != currentIndex ) { return; }
-                tourbus.next();
-              },
-              leg.rawData.autoProgress
-            );
-          }
-
-          // fade/slide in first leg
-          if( leg.index == 0 ) {
-            leg.$el
-              .css( { visibility: 'visible', opacity: 0, top: leg.options.top / 2 } )
-              .animate( { top: leg.options.top, opacity: 1.0 }, 500,
-                        function() { leg.show(); } );
-            return false;
-          }
-        },
-        onDepart: function() {
-          info.html("Intro tour started!");
-        },
-        onStop: function() {
-          info.html("Intro tour is inactive...");
-        }
-      } );
-    } );
-
-    var docsTour = $('#tourbus-demo-2').tourbus( {
+    $('#tourbus-demo-1').tourbus( {
+      // debug: true,
+      // autoDepart: true,
       onLegStart: function( leg, tourbus ) {
-        if( leg.rawData.andNext ) {
-          tourbus.currentLegIndex++;
-          tourbus.showLeg();
+        info.html("Intro tour is on leg: " + (leg.index+1));
+
+        // auto-progress where required
+        if( leg.rawData.autoProgress ) {
+          var currentIndex = leg.index;
+          setTimeout(
+            function() {
+              if( tourbus.currentLegIndex != currentIndex ) { return; }
+              tourbus.next();
+            },
+            leg.rawData.autoProgress
+          );
         }
+
+        // highlight where required
+        if( leg.rawData.highlight ) {
+          leg.$target.addClass('intro-tour-highlight');
+          $('.intro-tour-overlay').show();
+        }
+
+        // fade/slide in first leg
+        if( leg.index == 0 ) {
+          leg.$el
+            .css( { visibility: 'visible', opacity: 0, top: leg.options.top / 2 } )
+            .animate( { top: leg.options.top, opacity: 1.0 }, 500,
+                      function() { leg.show(); } );
+          return false;
+        }
+      },
+      onLegEnd: function( leg ) {
+        // remove highlight when leaving this leg
+        if( leg.rawData.highlight ) {
+          leg.$target.removeClass('intro-tour-highlight');
+          $('.intro-tour-overlay').hide();
+        }
+      },
+      onDepart: function() {
+        info.html("Intro tour started!");
+      },
+      onStop: function() {
+        info.html("Intro tour is inactive...");
       }
     } );
+
+    var docsTour = $('#tourbus-demo-2').tourbus();
+    var alternativesTour = $('#tourbus-demo-3').tourbus( { autoDepart: true } );
 
     $(document).on( 'click', '.docs-tour, .go-to-docs', function() {
       $('#tourbus-demo-1').trigger('stop.tourbus');

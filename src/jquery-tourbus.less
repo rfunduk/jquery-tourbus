@@ -58,8 +58,10 @@
 
 /* set the :after to be the _interior_ size of the arrow */
 /* set the :before to be the _interior + desired border width_ */
-.tourbus-arrow:after { border-width: 14px; }
-.tourbus-arrow:before { border-width: 16px; }
+@inner: 14px;
+@outer: 16px;
+.tourbus-arrow:after { border-width: @inner; }
+.tourbus-arrow:before { border-width: @outer; }
 
 /* Arrow background and border colors */
 @bg: #FFF;
@@ -71,10 +73,10 @@
 
   border colors here are for the _interior_ of the arrow
 */
-.tourbus-arrow-right:after { border-right-color: @bg; margin-top: -14px; top: 50%; }
-.tourbus-arrow-left:after { border-left-color: @bg; margin-top: -14px; top: 50%; }
-.tourbus-arrow-bottom:after { border-bottom-color: @bg; margin-left: -14px; left: 50%; }
-.tourbus-arrow-top:after { border-top-color: @bg; margin-left: -14px; left: 50%; }
+.tourbus-arrow-right:after { border-right-color: @bg; margin-top: -@inner; top: 50%; }
+.tourbus-arrow-left:after { border-left-color: @bg; margin-top: -@inner; top: 50%; }
+.tourbus-arrow-bottom:after { border-bottom-color: @bg; margin-left: -@inner; left: 50%; }
+.tourbus-arrow-top:after { border-top-color: @bg; margin-left: -@inner; left: 50%; }
 
 /*
   change margin-top/left values here to
@@ -82,10 +84,10 @@
 
   border colors here are for the _border_ of the arrow
 */
-.tourbus-arrow-right:before { border-right-color: @border; margin-top: -16px; top: 50%; }
-.tourbus-arrow-left:before { border-left-color: @border; margin-top: -16px; top: 50%; }
-.tourbus-arrow-bottom:before { border-bottom-color: @border; margin-left: -16px; left: 50%; }
-.tourbus-arrow-top:before { border-top-color: @border; margin-left: -16px; left: 50%; }
+.tourbus-arrow-right:before { border-right-color: @border; margin-top: -@outer; top: 50%; }
+.tourbus-arrow-left:before { border-left-color: @border; margin-top: -@outer; top: 50%; }
+.tourbus-arrow-bottom:before { border-bottom-color: @border; margin-left: -@outer; left: 50%; }
+.tourbus-arrow-top:before { border-top-color: @border; margin-left: -@outer; left: 50%; }
 
 
 /* you shouldn't need to change these */

@@ -35,6 +35,18 @@ module.exports = function(grunt) {
     watch: {
       files: ['src/<%= pkg.name %>.coffee'],
       tasks: ['coffee', 'uglify']
+    },
+    copy: {
+      main: {
+        files: [
+          {
+            expand: true,
+            cwd: 'dist/',
+            src: ['**/*.min.*'],
+            dest: 'site/'
+          }
+        ]
+      }
     }
   } );
 
@@ -43,6 +55,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks( 'grunt-contrib-less' );
   grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
   grunt.loadNpmTasks( 'grunt-contrib-watch' );
+  grunt.loadNpmTasks( 'grunt-contrib-copy' );
 
   grunt.registerTask( 'default', [
     'coffee', 'uglify',

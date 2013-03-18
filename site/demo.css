@@ -68,7 +68,10 @@ th {
   text-align: left;
   font-weight: bold;
   font-size: 12px;
-  padding-right: 10px;
+  padding-right: 5px;
+}
+td {
+  padding-left: 5px;
 }
 
 tr.section th {
@@ -81,6 +84,24 @@ tr.sep td {
   border-top: 1px solid #EEE;
 }
 
+.intro-tour-highlight {
+  background: white;
+  position: relative;
+  border-radius: 4px;
+  box-shadow: inset 0 0 2px rgba( 0, 0, 0, 0.2 );
+  z-index: 9998;
+}
+.intro-tour-overlay {
+  display: none;
+  background: #666;
+  opacity: 0.5;
+  z-index: 9997;
+  min-height: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0; right: 0; bottom: 0; left: 0;
+}
+
 #tour-info {
   position: fixed;
   height: 18px;
@@ -90,6 +111,11 @@ tr.sep td {
   right: 0;
   width: 125px;
   background: #F8F8F8;
+}
+
+#deps .optional {
+  color: #999;
+  border-color: #DDD;
 }
 
 .start-intro-tour, .go-to-docs {
@@ -106,6 +132,9 @@ tr.sep td {
   margin-top: 15px;
 }
 
+#docs-container {
+  margin-top: -16px;
+}
 .docs-nav {
   list-style: none outside;
   margin: 0;
@@ -119,9 +148,6 @@ tr.sep td {
     padding: 4px;
     margin-top: 16px;
   }
-    .docs-nav:first-child lh {
-      margin-top: 0;
-    }
   .docs-nav li {
     padding: 4px;
     margin: 0;
