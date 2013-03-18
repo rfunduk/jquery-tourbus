@@ -19,7 +19,7 @@ module.exports = function(grunt) {
     },
     less: {
       production: { files: {
-        "dist/<%= pkg.name %>.css": ["src/<%= pkg.name %>.less"]
+        'dist/<%= pkg.name %>.css': ['src/<%= pkg.name %>.less']
       } }
     },
     cssmin: {
@@ -47,6 +47,16 @@ module.exports = function(grunt) {
           }
         ]
       }
+    },
+    rsync: {
+      site: {
+        src: 'site/',
+        dest: '/var/www/rf/<%= pkg.name %>/',
+        host: 'ryanfunduk.com',
+        recursive: true,
+        syncDest: true,
+        args: [ '--verbose' ]
+      }
     }
   } );
 
@@ -56,10 +66,15 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
   grunt.loadNpmTasks( 'grunt-contrib-watch' );
   grunt.loadNpmTasks( 'grunt-contrib-copy' );
+  grunt.loadNpmTasks( 'grunt-rsync' );
 
   grunt.registerTask( 'default', [
     'coffee', 'uglify',
     'less', 'cssmin'
+  ] );
+
+  grunt.registerTask( 'deploy', [
+    'copy', 'rsync'
   ] );
 
 }
