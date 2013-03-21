@@ -37,7 +37,8 @@
 
         <p>
           Holy crap it is definitely <em>yet another</em> jQuery
-          tour/walkthrough plugin! And it is written in
+          tour/walkthrough plugin! And, are you sitting down?,
+          it's written in
           <a id='link' href='http://coffeescript.org' target='_blank'>CoffeeScript</a>!
           Arrrggg!
         </p>
@@ -57,7 +58,9 @@
 
         <div class='row'>
           <div class='five columns alpha'>
-            <img id='img' src="pranksters.jpg" class='five columns alpha' />
+            <a href='http://hiddenstash.deviantart.com/art/The-Merry-Pranksters-Bus-182763579' target='_blank'>
+              <img id='img' src="pranksters.jpg" class='five columns alpha' />
+            </a>
           </div>
           <div class='five columns omega'>
             <table>
@@ -66,9 +69,9 @@
                 <td>
                   <a class='button half-bottom' target='_blank' id='coffee-dl' href='https://raw.github.com/rfunduk/jquery-tourbus/master/src/jquery-tourbus.coffee'>coffeescript</a>
                   <br/>
-                  <a class='button half-bottom' target='_blank' id='plain-dl' href='https://github.com/rfunduk/jquery-tourbus/raw/master/dist/jquery-tourbus.js'>javascript (14k)</a>
+                  <a class='button half-bottom' target='_blank' id='plain-dl' href='https://github.com/rfunduk/jquery-tourbus/raw/master/dist/jquery-tourbus.js'>javascript (16k)</a>
                   <br/>
-                  <a class='button half-bottom' target='_blank' id='minified-dl' href='https://raw.github.com/rfunduk/jquery-tourbus/master/dist/jquery-tourbus.min.js'>minified (8k)</a>
+                  <a class='button half-bottom' target='_blank' id='minified-dl' href='https://raw.github.com/rfunduk/jquery-tourbus/master/dist/jquery-tourbus.min.js'>minified (9k)</a>
                 </td>
               </tr>
               <tr class='sep'>
@@ -102,7 +105,7 @@
           it will be fairly straight-forward to support
           <a href='' target='_blank'>Zepto</a> as well. <tt>scrollTo</tt>
           and <tt>imagesLoaded</tt> are optional and depend on what you're trying
-          to do and how your tour leg are implemented. See the
+          to do and how your tour legs are implemented. See the
           <a href='javascript:void(0);' class='docs-tour'>docs</a> for more on that.
         </p>
 
@@ -121,7 +124,7 @@
         </ul>
         <p>
           You know how it is, I just didn't really like them. Either too much configuration
-          in the DOM, or not enough. Confusing disregard for the simplicity of
+          in the DOM, or not enough. And, I prefer the simplicity of
           event-driven APIs. A ton of styles and animation that results in performance
           problems. All of these things ultimately stem from trying to do too much automatically.
         </p>
@@ -158,7 +161,7 @@
                   <lh>Basic Usage</lh>
                   <li><a href='#markup'>Markup</a></li>
                   <li><a href='#tourbus-events'>TourBus Events</a></li>
-                  <li><a href='#tourbus-methods'>TourBus Methods</a></li>
+                  <li><a href='#bus-methods'>Bus Methods</a></li>
                   <li><a href='#leg-methods'>Leg Methods</a></li>
                 </ul>
                 <ul class='docs-nav'>
@@ -177,7 +180,7 @@
                 <ul class='docs-nav'>
                   <lh>Advanced Usage</lh>
                   <li><a href='#custom-properties'>Custom Leg Properties</a></li>
-                  <li><a href='#tourbus-internals'>TourBus/Leg Internals</a></li>
+                  <li><a href='#internals'>Bus/Leg Internals</a></li>
                   <li><a href='#example-1'>Example: Auto-progress</a></li>
                   <li><a href='#example-2'>Example: Show Multiple</a></li>
                   <li><a href='#example-3'>Example: Animate in/out</a></li>
@@ -267,15 +270,28 @@ tour.trigger('depart.tourbus');
             </table>
 
             <p>
-              Or you can get a reference to the <strong><tt>TourBus</tt></strong>
-              instance itself and call methods directly:
+              If you prefer, you can get a reference to the <strong><tt>Bus</tt></strong>
+              instance itself and call methods directly. You can build it the same
+              way as above and grab the instance:
             </p>
 
             <script class='highlight' data-language='javascript' type='text/highlight'>
 tour.data('tourbus').depart();
             </script>
 
-            <a name='tourbus-methods'></a>
+            <p>
+              Or you can build it directly:
+            </p>
+
+            <script class='highlight' data-language='javascript' type='text/highlight'>
+$(document).ready( function() {
+  var tour = $.tourbus( '#my-tour-id', {} );
+  //  or:    $.tourbus( $('#my-tour-id'), {} );
+  //  or:    $.tourbus( 'build', '#my-tour-id', {} );
+} );
+            </script>
+
+            <a name='bus-methods'></a>
             <p>
               Here are its methods:
             </p>
@@ -302,16 +318,18 @@ tour.data('tourbus').depart();
                 <td>The <tt>Leg</tt> instance of the current leg.</td>
               </tr>
               <tr>
-                <th><tt>showLeg</tt></th>
-                <td>Forcibly show the current leg of the tour.</td>
+                <th><tt>showLeg( [index] )</tt></th>
+                <td>
+                  Forcibly show the current leg of the tour, or
+                  the leg at an optional index.
+                </td>
               </tr>
               <tr>
-                <th><tt>hideLeg</tt></th>
-                <td>Forcibly hide the current leg of the tour.</td>
-              </tr>
-              <tr>
-                <th><tt>hideAllLegs</tt></th>
-                <td>Forcibly hide all legs of the tour.</td>
+                <th><tt>hideLeg( [index] )</tt></th>
+                <td>
+                  Forcibly hide the current leg of the tour,
+                  or the leg at an optional index.
+                </td>
               </tr>
               <tr>
                 <th><tt>destroy</tt></th>
@@ -373,33 +391,14 @@ tour.data('tourbus').depart();
                   such that this leg is invisible.
                 </td>
               </tr>
-              <tr>
-                <th><tt>showLeg</tt></th>
-                <td>Forcibly show the current leg of the tour.</td>
-              </tr>
-              <tr>
-                <th><tt>hideLeg</tt></th>
-                <td>Forcibly hide the current leg of the tour.</td>
-              </tr>
-              <tr>
-                <th><tt>hideAllLegs</tt></th>
-                <td>Forcibly hide all legs of the tour.</td>
-              </tr>
-              <tr>
-                <th><tt>destroy</tt></th>
-                <td>
-                  <tt>destroy</tt> all legs,
-                  unbind all event handlers. Tour is over!
-                </td>
-              </tr>
             </table>
 
 
             <a name='global-options'></a>
             <h2>Customization</h2>
             <p>
-              The <tt>tourbus</tt> plugin constructor
-              takes some global options as an object like you would expect.
+              The <tt>tourbus</tt> plugin constructors
+              take some global options as an object like you would expect.
               They are:
             </p>
 
@@ -655,12 +654,6 @@ tourbus.on( 'click', 'selector', function() {
               and is more succinct and easier to read.
             </p>
 
-            <h2>Advanced Usage</h2>
-
-            <p>
-              Here's some example code and suggestions on how
-              you might implement some advanced use-cases.
-            </p>
 
             <a name='images'></a>
             <h3>Notes about Using Images</h3>
@@ -676,7 +669,7 @@ tourbus.on( 'click', 'selector', function() {
 
             <p>
               I recommend you use
-              <strong><a href='http://desandro.github.com/imagesloaded/' target='_blank'>jQuery-imagesLoaded</a></strong>
+              <a href='http://desandro.github.com/imagesloaded/' target='_blank'>jQuery-imagesLoaded</a>
               to solve this problem. Simply wrap your entire tour initialization
               in a call to <tt>imagesLoaded</tt>:
             </p>
@@ -684,7 +677,7 @@ tourbus.on( 'click', 'selector', function() {
             <script class='highlight' data-language='javascript' type='text/highlight'>
 $(document).ready( function() {
   $('img').imagesLoaded( function() {
-    var tour = $('#my-tour-id').tourbus( {} );
+    $('#my-tour-id').tourbus( {} );
   } );
 } );
             </script>
@@ -697,13 +690,21 @@ $(document).ready( function() {
               layout (icons and the like) then you're probably ok.
             </p>
 
+
+            <h2>Advanced Usage</h2>
+
+            <p>
+              Here's some example code and suggestions on how
+              you might implement some advanced use-cases.
+            </p>
+
             <a name='custom-properties'></a>
             <h3>Custom Properties</h3>
             <p>
               The first thing you need to know is that <tt>data-*</tt>
               attributes unused/unknown to TourBus will be available on
               your legs as <tt>rawData</tt>. Also anything passed into
-              the TourBus constructor that is unrecognized will be
+              a TourBus constructor that is unrecognized will be
               available as <tt>options</tt>.
             </p>
 
@@ -718,16 +719,16 @@ $(document).ready( function() {
               <a href='#example-1'>auto-progress</a> and <a href='#example-4'>highlight/expose</a>.
             </p>
 
-            <a name='tourbus-internals'></a>
-            <h3>Useful TourBus Internal Properties</h3>
+            <a name='internals'></a>
+            <h3>Useful Internal Properties</h3>
             <p>
-              Internal properties of <tt>Leg</tt> and <tt>TourBus</tt>
+              Internal properties of <tt>Leg</tt> and <tt>Bus</tt>
               instances that you will find useful for advanced use-cases.
             </p>
 
             <table class='docs'>
               <tr class='section'>
-                <th colspan='2'><tt><strong>TourBus</strong></tt> instances</th>
+                <th colspan='2'><tt><strong>Bus</strong></tt> instances</th>
               </tr>
               <tr>
                 <th width='25%'><tt>currentLegIndex</tt></th>
@@ -754,7 +755,8 @@ $(document).ready( function() {
                 <th><tt>legs</tt></th>
                 <td>
                   An array of <tt>Leg</tt> instances, in the order
-                  they were defined in the DOM.
+                  they were defined in the DOM. <small><strong>Note:</strong>
+                  The legs are not actually inserted until departure.</small>
                 </td>
               </tr>
               <tr>
@@ -779,8 +781,8 @@ $(document).ready( function() {
                 <th colspan='2'><tt><strong>Leg</strong></tt> instances</th>
               </tr>
               <tr>
-                <th><tt>tourbus</tt></th>
-                <td>The tourbus this leg belongs to.</td>
+                <th><tt>bus</tt></th>
+                <td>The <tt>Bus</tt> this leg belongs to.</td>
               </tr>
               <tr>
                 <th width='25%'><tt>rawData</tt></th>
@@ -807,9 +809,9 @@ $(document).ready( function() {
             <script class='highlight' data-language='javascript' type='text/highlight'>
 $('#my-tour').tourbus( {
   customProp: 5,
-  onLegStart: function( leg, tourbus ) {
+  onLegStart: function( leg, bus ) {
     console.log( "Leg", leg.index, ":", leg.rawData );
-    console.log( "TourBus customProp:", tourbus.options.customProp );
+    console.log( "TourBus customProp:", bus.options.customProp );
   }
 } );
             </script>
@@ -842,13 +844,13 @@ $('#my-tour').tourbus( {
 
             <script class='highlight' data-language='javascript' type='text/highlight'>
 $('#my-tour').tourbus( {
-  onLegStart: function( leg, tourbus ) {
+  onLegStart: function( leg, bus ) {
     if( leg.rawData.autoProgress ) {
       var currentIndex = leg.index;
       setTimeout(
         function() {
-          if( tourbus.currentLegIndex != currentIndex ) { return; }
-          tourbus.next();
+          if( bus.currentLegIndex != currentIndex ) { return; }
+          bus.next();
         },
         leg.rawData.autoProgress
       );
@@ -881,10 +883,10 @@ $('#my-tour').tourbus( {
 
             <script class='highlight' data-language='javascript' type='text/highlight'>
 $('#my-tour').tourbus( {
-  onLegStart: function( leg, tourbus ) {
+  onLegStart: function( leg, bus ) {
     if( leg.rawData.andNext ) {
-      tourbus.currentLegIndex++;
-      tourbus.showLeg();
+      bus.currentLegIndex++;
+      bus.showLeg();
     }
   }
 } );
@@ -918,7 +920,7 @@ $('#my-tour').tourbus( {
 
             <script class='highlight' data-language='javascript' type='text/highlight'>
 $('#my-tour').tourbus( {
-  onLegStart: function( leg, tourbus ) {
+  onLegStart: function( leg, bus ) {
     leg.$el
       .css( { visibility: 'visible', opacity: 0, zIndex: 9999 } )
       .animate( { opacity: 1.0 }, 1000,
@@ -971,13 +973,13 @@ $('#my-tour').tourbus( {
 
             <script class='highlight' data-language='javascript' type='text/highlight'>
 $('#my-tour').tourbus( {
-  onLegStart: function( leg, tourbus ) {
+  onLegStart: function( leg, bus ) {
     if( leg.rawData.highlight ) {
       leg.$target.addClass('my-tour-highlight');
       $('.my-tour-overlay').show();
     }
   },
-  onLegEnd: function( leg, tourbus ) {
+  onLegEnd: function( leg, bus ) {
     if( leg.rawData.highlight ) {
       leg.$target.removeClass('my-tour-highlight');
       $('.my-tour-overlay').hide();
@@ -993,7 +995,7 @@ $('#my-tour').tourbus( {
           </div>
         </div>
 
-        <div style='margin-top: 2000px; margin-bottom: 400px;'>
+        <div style='margin-top: 2000px; margin-bottom: 350px;'>
           <p id='it-scrolls' style='text-align: center;'>
             It also scrolls for you, if you have <tt>jQuery.scrollTo</tt>
             included on your page.
@@ -1121,6 +1123,21 @@ $('#my-tour').tourbus( {
         </ol>
       </div>
     </div>
+
     <div class='intro-tour-overlay'></div>
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-3195024-3']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
   </body>
 </html>

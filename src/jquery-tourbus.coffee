@@ -1,10 +1,42 @@
 ( ($) ->
 
-  $.fn.tourbus = ( options={} ) ->
-    options = $.extend( true, {}, $.fn.tourbus.defaults, options )
-    this.each( -> new TourBus( this, options ) )
+  tourbus = $.tourbus = ( args... ) ->
+    method = args[0]
+    if methods.hasOwnProperty( method )
+      args = args[1..]
+    else if method instanceof $
+      method = 'build'
+    else if typeof method == 'string'
+      method = 'build'
+      args[0] = $(args[0])
+    else
+      $.error( "Unknown method of $.tourbus --", args )
 
-  $.fn.tourbus.defaults =
+    methods[method].apply( this, args )
+
+  $.fn.tourbus = ( args... ) ->
+    this.each ->
+      args.unshift( $(this) )
+      tourbus( 'build', args... )
+      return this
+
+  methods =
+    build: ( el, options={} ) ->
+      options = $.extend( true, {}, tourbus.defaults, options )
+      built = []
+      el = $(el) unless el instanceof $
+      el.each -> built.push( _assemble( this, options ) )
+      $.error( "#{el.selector} was not found!" ) if built.length == 0
+      return built[0] if built.length == 1
+      return built
+
+    destroyAll: ->
+      bus.destroy() for index, bus of _busses
+
+    expose: ( global ) ->
+      global.tourbus = Bus: Bus, Leg: Leg
+
+  tourbus.defaults =
     debug: false
     autoDepart: false
     target: 'body'
@@ -27,7 +59,7 @@
 
   ### Internal ###
 
-  class TourBus
+  class Bus
     constructor: ( el, options ) ->
       @id = uniqueId()
       @$target = $(options.target)
@@ -36,23 +68,24 @@
 
       @options = options
       @currentLegIndex = null
+      @legs = null
       @totalLegs = @$el.find('li').length
       @_setupEvents()
 
       @$el.trigger('depart.tourbus') if @options.autoDepart
-      @_log 'built tourbus with options', @options
+      @_log 'built tourbus with el', el.toString(), 'and options', @options
 
     # start and end the entire tour, resetting to the beginning
     depart: ->
       @running = true
       @options.onDepart( @ )
-      @_log 'departing'
+      @_log 'departing', @
       @legs = @_buildLegs()
       @currentLegIndex = @options.startAt
-      @showLeg(@currentLegIndex)
+      @showLeg()
     stop: ->
       return unless @running
-      @hideAllLegs()
+      $.each( @legs, $.proxy(@hideLeg, @) ) if @legs
       @currentLegIndex = @options.startAt
       @options.onStop( @ )
       @running = false
@@ -69,33 +102,38 @@
     showLeg: ( index ) ->
       index ?= @currentLegIndex
       leg = @legs[index]
+      @_log 'showLeg:', leg
       preventDefault = @options.onLegStart( leg, @ )
       leg.show() if preventDefault != false
     hideLeg: ( index ) ->
+      index ?= @currentLegIndex
       leg = @legs[index]
+      @_log 'hideLeg:', leg
       preventDefault = @options.onLegEnd( leg, @ )
       leg.hide() if preventDefault != false
-    hideAllLegs: ->
-      $.each( @legs, $.proxy(@hideLeg, @) )
 
     # convenience to proceed to next/previous leg or end tour
     # when we're out of legs
     next: ->
-      @hideAllLegs()
+      @hideLeg()
       @currentLegIndex++
-      if @currentLegIndex > @totalLegs - 1 then @stop() else @showLeg(@currentLegIndex)
-    prev: ->
-      @hideAllLegs()
+      return @stop() if @currentLegIndex > @totalLegs - 1
+      @showLeg()
+    prev: ( cb ) ->
+      @hideLeg()
       @currentLegIndex--
-      if @currentLegIndex < 0 then @stop() else @showLeg(@currentLegIndex)
+      return @stop() if @currentLegIndex < 0
+      @showLeg()
 
     destroy: ->
-      $.each( @legs, -> this.destroy() )
+      $.each( @legs, -> this.destroy() ) if @legs
+      @legs = null
+      delete _busses[@id]
       @_teardownEvents()
 
     _buildLegs: ->
       # remove all previous legs
-      $.each( @legs, ( _, leg ) -> leg.destroy() ) if @legs && @legs.length
+      $.each( @legs, ( _, leg ) -> leg.destroy() ) if @legs
 
       # build all legs
       $.map(
@@ -107,7 +145,7 @@
           leg = new Leg(
             content: $legEl.html()
             target: data.el || 'body'
-            tourbus: @
+            bus: @
             index: i
             rawData: data
           )
@@ -121,9 +159,7 @@
 
     _log: ->
       return unless @options.debug
-      args = new Array(arguments)
-      args.unshift "TOURBUS #{@id}:"
-      console.log args...
+      console.log "TOURBUS #{@id}:", arguments...
 
     # provide even handling for external start/stop/next/prev
     _setupEvents: ->
@@ -134,10 +170,9 @@
     _teardownEvents: ->
       @$el.off '.tourbus'
 
-
   class Leg
     constructor: ( options ) ->
-      @tourbus = options.tourbus
+      @bus = options.bus
       @rawData = options.rawData
       @content = options.content
       @index = options.index
@@ -155,7 +190,7 @@
 
       @_setupEvents()
 
-      @tourbus._log "leg #{@index} made with options", @options
+      @bus._log "leg #{@index} made with options", @options
 
     render: ->
       arrowClass = if @options.orientation == 'centered' then '' else 'tourbus-arrow'
@@ -180,31 +215,30 @@
         @options.arrow += 'px' if typeof(@options.arrow) == 'number'
         rule[keys[@options.orientation]] = @options.arrow
         selector = "##{@id}.tourbus-arrow"
-        @tourbus._log "adding rule for #{@id}", rule
+        @bus._log "adding rule for #{@id}", rule
         _addRule( "#{selector}:before, #{selector}:after", rule )
 
       css = @_offsets()
-      @tourbus._log 'setting offsets on leg', css
+      @bus._log 'setting offsets on leg', css
       @$el.css css
 
     show: ->
       @$el.css visibility: 'visible', opacity: 1.0, zIndex: 9999
       @scrollIntoView()
     hide: ->
-      if @tourbus.options.debug
+      if @bus.options.debug
         @$el.css visibility: 'visible', opacity: 0.4, zIndex: 0
       else
         @$el.css visibility: 'hidden'
 
     scrollIntoView: ->
-      return unless $.fn.scrollTo && !isNaN(@options.scrollSpeed)
-      return if @options.scrollTo == false
+      return unless @willScroll
       scrollTarget = _dataProp( @options.scrollTo, @$el )
-      @tourbus._log 'scrolling to', scrollTarget, @scrollSettings
+      @bus._log 'scrolling to', scrollTarget, @scrollSettings
       $.scrollTo( scrollTarget, @scrollSettings )
 
     _setupOptions: ->
-      globalOptions = @tourbus.options.leg
+      globalOptions = @bus.options.leg
       @options.top = _dataProp( @rawData.top, globalOptions.top )
       @options.left = _dataProp( @rawData.left, globalOptions.left )
       @options.scrollTo = _dataProp( @rawData.scrollTo, globalOptions.scrollTo )
@@ -217,16 +251,16 @@
       @options.orientation = @rawData.orientation || globalOptions.orientation
 
     _configureElement: ->
-      @id = "tourbus-leg-id-#{@tourbus.id}-#{@options.index}"
+      @id = "tourbus-leg-id-#{@bus.id}-#{@options.index}"
       @$el = $("<div class='tourbus-leg'></div>")
       @el = @$el[0]
       @$el.attr( id: @id )
       @$el.css( zIndex: 9999 )
 
     _setupEvents: ->
-      @$el.on 'click', '.tourbus-next', $.proxy( @tourbus.next, @tourbus )
-      @$el.on 'click', '.tourbus-prev', $.proxy( @tourbus.prev, @tourbus )
-      @$el.on 'click', '.tourbus-stop', $.proxy( @tourbus.stop, @tourbus )
+      @$el.on 'click', '.tourbus-next', $.proxy( @bus.next, @bus )
+      @$el.on 'click', '.tourbus-prev', $.proxy( @bus.prev, @bus )
+      @$el.on 'click', '.tourbus-stop', $.proxy( @bus.stop, @bus )
     _teardownEvents: ->
       @$el.off 'click'
 
@@ -239,6 +273,7 @@
       @targetHeight = @$target.outerHeight()
 
     _configureScroll: ->
+      @willScroll = $.fn.scrollTo && @options.scrollTo != false
       @scrollSettings =
         offset: -@options.scrollContext
         easing: 'linear'
@@ -303,19 +338,13 @@
 
       return offsets
 
-    _debugHtml: ->
-      debuggableOptions = $.extend( true, {}, @options )
-      delete debuggableOptions.tourbus
-      delete debuggableOptions.content
-      delete debuggableOptions.target
-      """
-        <small>
-          This leg built with:
-          <pre>#{JSON.stringify(debuggableOptions, undefined, 2)}</pre>
-        </small>
-      """
-
   _tours = 0; uniqueId = -> return _tours++
+
+  _busses = {}
+  _assemble = ->
+    bus = new Bus( arguments... )
+    _busses[bus.id] = bus
+    bus
 
   _dataProp = ( possiblyFalsy, alternative ) ->
     if possiblyFalsy == null || typeof(possiblyFalsy) == 'undefined'

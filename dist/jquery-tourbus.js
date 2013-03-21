@@ -1,17 +1,72 @@
 (function() {
+  var __slice = [].slice;
 
   (function($) {
-    var Leg, TourBus, uniqueId, _addRule, _dataProp, _include, _tours;
-    $.fn.tourbus = function(options) {
-      if (options == null) {
-        options = {};
+    var Bus, Leg, methods, tourbus, uniqueId, _addRule, _assemble, _busses, _dataProp, _include, _tours;
+    tourbus = $.tourbus = function() {
+      var args, method;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+      method = args[0];
+      if (methods.hasOwnProperty(method)) {
+        args = args.slice(1);
+      } else if (method instanceof $) {
+        method = 'build';
+      } else if (typeof method === 'string') {
+        method = 'build';
+        args[0] = $(args[0]);
+      } else {
+        $.error("Unknown method of $.tourbus --", args);
       }
-      options = $.extend(true, {}, $.fn.tourbus.defaults, options);
+      return methods[method].apply(this, args);
+    };
+    $.fn.tourbus = function() {
+      var args;
+      args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return this.each(function() {
-        return new TourBus(this, options);
+        args.unshift($(this));
+        tourbus.apply(null, ['build'].concat(__slice.call(args)));
+        return this;
       });
     };
-    $.fn.tourbus.defaults = {
+    methods = {
+      build: function(el, options) {
+        var built;
+        if (options == null) {
+          options = {};
+        }
+        options = $.extend(true, {}, tourbus.defaults, options);
+        built = [];
+        if (!(el instanceof $)) {
+          el = $(el);
+        }
+        el.each(function() {
+          return built.push(_assemble(this, options));
+        });
+        if (built.length === 0) {
+          $.error("" + el.selector + " was not found!");
+        }
+        if (built.length === 1) {
+          return built[0];
+        }
+        return built;
+      },
+      destroyAll: function() {
+        var bus, index, _results;
+        _results = [];
+        for (index in _busses) {
+          bus = _busses[index];
+          _results.push(bus.destroy());
+        }
+        return _results;
+      },
+      expose: function(global) {
+        return global.tourbus = {
+          Bus: Bus,
+          Leg: Leg
+        };
+      }
+    };
+    tourbus.defaults = {
       debug: false,
       autoDepart: false,
       target: 'body',
@@ -44,9 +99,9 @@
     /* Internal
     */
 
-    TourBus = (function() {
+    Bus = (function() {
 
-      function TourBus(el, options) {
+      function Bus(el, options) {
         this.id = uniqueId();
         this.$target = $(options.target);
         this.$el = $(el);
@@ -55,99 +110,105 @@
         });
         this.options = options;
         this.currentLegIndex = null;
+        this.legs = null;
         this.totalLegs = this.$el.find('li').length;
         this._setupEvents();
         if (this.options.autoDepart) {
           this.$el.trigger('depart.tourbus');
         }
-        this._log('built tourbus with options', this.options);
+        this._log('built tourbus with el', el.toString(), 'and options', this.options);
       }
 
-      TourBus.prototype.depart = function() {
+      Bus.prototype.depart = function() {
         this.running = true;
         this.options.onDepart(this);
-        this._log('departing');
+        this._log('departing', this);
         this.legs = this._buildLegs();
         this.currentLegIndex = this.options.startAt;
-        return this.showLeg(this.currentLegIndex);
+        return this.showLeg();
       };
 
-      TourBus.prototype.stop = function() {
+      Bus.prototype.stop = function() {
         if (!this.running) {
           return;
         }
-        this.hideAllLegs();
+        if (this.legs) {
+          $.each(this.legs, $.proxy(this.hideLeg, this));
+        }
         this.currentLegIndex = this.options.startAt;
         this.options.onStop(this);
         return this.running = false;
       };
 
-      TourBus.prototype.on = function(event, selector, fn) {
+      Bus.prototype.on = function(event, selector, fn) {
         return this.$target.on(event, selector, fn);
       };
 
-      TourBus.prototype.currentLeg = function() {
+      Bus.prototype.currentLeg = function() {
         if (this.currentLegIndex === null) {
           return null;
         }
         return this.legs[this.currentLegIndex];
       };
 
-      TourBus.prototype.showLeg = function(index) {
+      Bus.prototype.showLeg = function(index) {
         var leg, preventDefault;
         if (index == null) {
           index = this.currentLegIndex;
         }
         leg = this.legs[index];
+        this._log('showLeg:', leg);
         preventDefault = this.options.onLegStart(leg, this);
         if (preventDefault !== false) {
           return leg.show();
         }
       };
 
-      TourBus.prototype.hideLeg = function(index) {
+      Bus.prototype.hideLeg = function(index) {
         var leg, preventDefault;
+        if (index == null) {
+          index = this.currentLegIndex;
+        }
         leg = this.legs[index];
+        this._log('hideLeg:', leg);
         preventDefault = this.options.onLegEnd(leg, this);
         if (preventDefault !== false) {
           return leg.hide();
         }
       };
 
-      TourBus.prototype.hideAllLegs = function() {
-        return $.each(this.legs, $.proxy(this.hideLeg, this));
-      };
-
-      TourBus.prototype.next = function() {
-        this.hideAllLegs();
+      Bus.prototype.next = function() {
+        this.hideLeg();
         this.currentLegIndex++;
         if (this.currentLegIndex > this.totalLegs - 1) {
           return this.stop();
-        } else {
-          return this.showLeg(this.currentLegIndex);
         }
+        return this.showLeg();
       };
 
-      TourBus.prototype.prev = function() {
-        this.hideAllLegs();
+      Bus.prototype.prev = function(cb) {
+        this.hideLeg();
         this.currentLegIndex--;
         if (this.currentLegIndex < 0) {
           return this.stop();
-        } else {
-          return this.showLeg(this.currentLegIndex);
         }
+        return this.showLeg();
       };
 
-      TourBus.prototype.destroy = function() {
-        $.each(this.legs, function() {
-          return this.destroy();
-        });
+      Bus.prototype.destroy = function() {
+        if (this.legs) {
+          $.each(this.legs, function() {
+            return this.destroy();
+          });
+        }
+        this.legs = null;
+        delete _busses[this.id];
         return this._teardownEvents();
       };
 
-      TourBus.prototype._buildLegs = function() {
+      Bus.prototype._buildLegs = function() {
         var _this = this;
-        if (this.legs && this.legs.length) {
+        if (this.legs) {
           $.each(this.legs, function(_, leg) {
             return leg.destroy();
           });
@@ -159,7 +220,7 @@
           leg = new Leg({
             content: $legEl.html(),
             target: data.el || 'body',
-            tourbus: _this,
+            bus: _this,
             index: i,
             rawData: data
           });
@@ -171,34 +232,31 @@
         });
       };
 
-      TourBus.prototype._log = function() {
-        var args;
+      Bus.prototype._log = function() {
         if (!this.options.debug) {
           return;
         }
-        args = new Array(arguments);
-        args.unshift("TOURBUS " + this.id + ":");
-        return console.log.apply(console, args);
+        return console.log.apply(console, ["TOURBUS " + this.id + ":"].concat(__slice.call(arguments)));
       };
 
-      TourBus.prototype._setupEvents = function() {
+      Bus.prototype._setupEvents = function() {
         this.$el.on('depart.tourbus', $.proxy(this.depart, this));
         this.$el.on('stop.tourbus', $.proxy(this.stop, this));
         this.$el.on('next.tourbus', $.proxy(this.next, this));
         return this.$el.on('prev.tourbus', $.proxy(this.prev, this));
       };
 
-      TourBus.prototype._teardownEvents = function() {
+      Bus.prototype._teardownEvents = function() {
         return this.$el.off('.tourbus');
       };
 
-      return TourBus;
+      return Bus;
 
     })();
     Leg = (function() {
 
       function Leg(options) {
-        this.tourbus = options.tourbus;
+        this.bus = options.bus;
         this.rawData = options.rawData;
         this.content = options.content;
         this.index = options.index;
@@ -212,7 +270,7 @@
         this._configureTarget();
         this._configureScroll();
         this._setupEvents();
-        this.tourbus._log("leg " + this.index + " made with options", this.options);
+        this.bus._log("leg " + this.index + " made with options", this.options);
       }
 
       Leg.prototype.render = function() {
@@ -246,11 +304,11 @@
           }
           rule[keys[this.options.orientation]] = this.options.arrow;
           selector = "#" + this.id + ".tourbus-arrow";
-          this.tourbus._log("adding rule for " + this.id, rule);
+          this.bus._log("adding rule for " + this.id, rule);
           _addRule("" + selector + ":before, " + selector + ":after", rule);
         }
         css = this._offsets();
-        this.tourbus._log('setting offsets on leg', css);
+        this.bus._log('setting offsets on leg', css);
         return this.$el.css(css);
       };
 
@@ -264,7 +322,7 @@
       };
 
       Leg.prototype.hide = function() {
-        if (this.tourbus.options.debug) {
+        if (this.bus.options.debug) {
           return this.$el.css({
             visibility: 'visible',
             opacity: 0.4,
@@ -279,20 +337,17 @@
 
       Leg.prototype.scrollIntoView = function() {
         var scrollTarget;
-        if (!($.fn.scrollTo && !isNaN(this.options.scrollSpeed))) {
-          return;
-        }
-        if (this.options.scrollTo === false) {
+        if (!this.willScroll) {
           return;
         }
         scrollTarget = _dataProp(this.options.scrollTo, this.$el);
-        this.tourbus._log('scrolling to', scrollTarget, this.scrollSettings);
+        this.bus._log('scrolling to', scrollTarget, this.scrollSettings);
         return $.scrollTo(scrollTarget, this.scrollSettings);
       };
 
       Leg.prototype._setupOptions = function() {
         var globalOptions;
-        globalOptions = this.tourbus.options.leg;
+        globalOptions = this.bus.options.leg;
         this.options.top = _dataProp(this.rawData.top, globalOptions.top);
         this.options.left = _dataProp(this.rawData.left, globalOptions.left);
         this.options.scrollTo = _dataProp(this.rawData.scrollTo, globalOptions.scrollTo);
@@ -306,7 +361,7 @@
       };
 
       Leg.prototype._configureElement = function() {
-        this.id = "tourbus-leg-id-" + this.tourbus.id + "-" + this.options.index;
+        this.id = "tourbus-leg-id-" + this.bus.id + "-" + this.options.index;
         this.$el = $("<div class='tourbus-leg'></div>");
         this.el = this.$el[0];
         this.$el.attr({
@@ -318,9 +373,9 @@
       };
 
       Leg.prototype._setupEvents = function() {
-        this.$el.on('click', '.tourbus-next', $.proxy(this.tourbus.next, this.tourbus));
-        this.$el.on('click', '.tourbus-prev', $.proxy(this.tourbus.prev, this.tourbus));
-        return this.$el.on('click', '.tourbus-stop', $.proxy(this.tourbus.stop, this.tourbus));
+        this.$el.on('click', '.tourbus-next', $.proxy(this.bus.next, this.bus));
+        this.$el.on('click', '.tourbus-prev', $.proxy(this.bus.prev, this.bus));
+        return this.$el.on('click', '.tourbus-stop', $.proxy(this.bus.stop, this.bus));
       };
 
       Leg.prototype._teardownEvents = function() {
@@ -340,6 +395,7 @@
       };
 
       Leg.prototype._configureScroll = function() {
+        this.willScroll = $.fn.scrollTo && this.options.scrollTo !== false;
         return this.scrollSettings = {
           offset: -this.options.scrollContext,
           easing: 'linear',
@@ -411,21 +467,23 @@
         return offsets;
       };
 
-      Leg.prototype._debugHtml = function() {
-        var debuggableOptions;
-        debuggableOptions = $.extend(true, {}, this.options);
-        delete debuggableOptions.tourbus;
-        delete debuggableOptions.content;
-        delete debuggableOptions.target;
-        return "<small>\n  This leg built with:\n  <pre>" + (JSON.stringify(debuggableOptions, void 0, 2)) + "</pre>\n</small>";
-      };
-
       return Leg;
 
     })();
     _tours = 0;
     uniqueId = function() {
       return _tours++;
+    };
+    _busses = {};
+    _assemble = function() {
+      var bus;
+      bus = (function(func, args, ctor) {
+        ctor.prototype = func.prototype;
+        var child = new ctor, result = func.apply(child, args);
+        return Object(result) === result ? result : child;
+      })(Bus, arguments, function(){});
+      _busses[bus.id] = bus;
+      return bus;
     };
     _dataProp = function(possiblyFalsy, alternative) {
       if (possiblyFalsy === null || typeof possiblyFalsy === 'undefined') {

@@ -6,7 +6,7 @@ $(document).ready( function() {
     $('#tourbus-demo-1').tourbus( {
       // debug: true,
       // autoDepart: true,
-      onLegStart: function( leg, tourbus ) {
+      onLegStart: function( leg, bus ) {
         info.html("Intro tour is on leg: " + (leg.index+1));
 
         // auto-progress where required
@@ -14,8 +14,8 @@ $(document).ready( function() {
           var currentIndex = leg.index;
           setTimeout(
             function() {
-              if( tourbus.currentLegIndex != currentIndex ) { return; }
-              tourbus.next();
+              if( bus.currentLegIndex != currentIndex ) { return; }
+              bus.next();
             },
             leg.rawData.autoProgress
           );
@@ -51,12 +51,12 @@ $(document).ready( function() {
       }
     } );
 
-    var docsTour = $('#tourbus-demo-2').tourbus();
-    var alternativesTour = $('#tourbus-demo-3').tourbus( { autoDepart: true } );
+    var docsBus = $.tourbus( '#tourbus-demo-2' );
+    $.tourbus( 'build', '#tourbus-demo-3', { autoDepart: true } );
 
     $(document).on( 'click', '.docs-tour, .go-to-docs', function() {
       $('#tourbus-demo-1').trigger('stop.tourbus');
-      docsTour.data('tourbus').depart();
+      docsBus.depart();
     } );
     $(document).on( 'click', '.start-intro-tour', function() {
       $('#tourbus-demo-1').trigger('depart.tourbus');
