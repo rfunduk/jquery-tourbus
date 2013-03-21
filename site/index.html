@@ -165,22 +165,23 @@
                   <li><a href='#leg-methods'>Leg Methods</a></li>
                 </ul>
                 <ul class='docs-nav'>
-                  <lh>Customization</lh>
-                  <li><a href='#global-options'>TourBus Options</a></li>
-                  <li><a href='#leg-options'>Leg Options</a></li>
-                </ul>
-              </div>
-              <div class='five columns omega'>
-                <ul class='docs-nav'>
                   <lh>Miscellaneous</lh>
                   <li><a href='#convenience-classes'>Leg Convenience Classes</a></li>
                   <li><a href='#css-stuff'>Leg CSS</a></li>
                   <li><a href='#images'>Notes about Images</a></li>
                 </ul>
+              </div>
+              <div class='five columns omega'>
+                <ul class='docs-nav'>
+                  <lh>Customization</lh>
+                  <li><a href='#global-options'>Bus Options</a></li>
+                  <li><a href='#leg-options'>Leg Options</a></li>
+                </ul>
                 <ul class='docs-nav'>
                   <lh>Advanced Usage</lh>
                   <li><a href='#custom-properties'>Custom Leg Properties</a></li>
                   <li><a href='#internals'>Bus/Leg Internals</a></li>
+                  <li><a href='#monkey-patching'>Monkey Patching</a></li>
                   <li><a href='#example-1'>Example: Auto-progress</a></li>
                   <li><a href='#example-2'>Example: Show Multiple</a></li>
                   <li><a href='#example-3'>Example: Animate in/out</a></li>
@@ -236,7 +237,7 @@ $(document).ready( function() {
             </script>
 
             <p>
-              Now the <strong><tt>tour</tt></strong> variable has the ordered
+              Now the <tt>tour</tt> variable has the ordered
               list of legs we defined above. You can trigger events on this
               element:
             </p>
@@ -270,7 +271,7 @@ tour.trigger('depart.tourbus');
             </table>
 
             <p>
-              If you prefer, you can get a reference to the <strong><tt>Bus</tt></strong>
+              If you prefer, you can get a reference to the <tt>Bus</tt>
               instance itself and call methods directly. You can build it the same
               way as above and grab the instance:
             </p>
@@ -820,6 +821,31 @@ $('#my-tour').tourbus( {
               This is how you can implement custom behavior easily, simply
               give your legs individual custom properties, or give them
               to TourBus as global options.
+            </p>
+
+
+            <a name='monkey-patching'></a>
+            <h3>Monkey Patching</h3>
+
+            <p>
+              If you're doing something seriously weird, you might
+              want access to the core <tt>Bus</tt> and <tt>Leg</tt> classes.
+              They are entirely hidden in the plugin's scope, so you
+              can't really get at them. <tt>expose</tt> to the rescue!
+            </p>
+
+            <script class='highlight' data-language='javascript' type='text/highlight'>
+$.tourbus( 'expose', window );
+// You now have access!
+//   window.tourbus.Bus
+//   window.tourbus.Leg
+            </script>
+
+            <p>
+              <tt>expose</tt> takes any object-like
+              as a parameter, here we just use <tt>window</tt>.
+              Now you can easily monkey patch methods or add methods to the
+              prototypes all you like.
             </p>
 
             <a name='example-1'></a>
