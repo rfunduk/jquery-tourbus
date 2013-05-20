@@ -61,3 +61,8 @@ Other useful tasks:
 
 If you're working on a pull request, please remember to work on a local
 branch instead of master.
+
+## Contributors
+
+- [Ryan Funduk](https://github.com/rfunduk)
+- [Gary Taylor](https://github.com/henrythewasp)
