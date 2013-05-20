@@ -112,6 +112,10 @@
       preventDefault = @options.onLegEnd( leg, @ )
       leg.hide() if preventDefault != false
 
+    # refresh on-screen positions of all legs (can be used after window resize)
+    refreshLegPositions: ->
+      $.each( @legs, -> this.refreshPosition() ) if @legs
+       
     # convenience to proceed to next/previous leg or end tour
     # when we're out of legs
     next: ->
@@ -206,6 +210,11 @@
     destroy: ->
       @$el.remove()
       @_teardownEvents()
+
+    refreshPosition: ->
+      @_configureTarget()
+      @_configureScroll()
+      @position()
 
     position: ->
       # position arrow
