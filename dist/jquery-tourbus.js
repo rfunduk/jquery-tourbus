@@ -3,8 +3,10 @@
 
   (function($) {
     var Bus, Leg, methods, tourbus, uniqueId, _addRule, _assemble, _busses, _dataProp, _include, _tours;
+
     tourbus = $.tourbus = function() {
       var args, method;
+
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       method = args[0];
       if (methods.hasOwnProperty(method)) {
@@ -21,6 +23,7 @@
     };
     $.fn.tourbus = function() {
       var args;
+
       args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
       return this.each(function() {
         args.unshift($(this));
@@ -31,6 +34,7 @@
     methods = {
       build: function(el, options) {
         var built;
+
         if (options == null) {
           options = {};
         }
@@ -52,6 +56,7 @@
       },
       destroyAll: function() {
         var bus, index, _results;
+
         _results = [];
         for (index in _busses) {
           bus = _busses[index];
@@ -100,7 +105,6 @@
     */
 
     Bus = (function() {
-
       function Bus(el, options) {
         this.id = uniqueId();
         this.$target = $(options.target);
@@ -153,6 +157,7 @@
 
       Bus.prototype.showLeg = function(index) {
         var leg, preventDefault;
+
         if (index == null) {
           index = this.currentLegIndex;
         }
@@ -166,6 +171,7 @@
 
       Bus.prototype.hideLeg = function(index) {
         var leg, preventDefault;
+
         if (index == null) {
           index = this.currentLegIndex;
         }
@@ -174,6 +180,14 @@
         preventDefault = this.options.onLegEnd(leg, this);
         if (preventDefault !== false) {
           return leg.hide();
+        }
+      };
+
+      Bus.prototype.refreshLegPositions = function() {
+        if (this.legs) {
+          return $.each(this.legs, function() {
+            return this.refreshPosition();
+          });
         }
       };
 
@@ -208,6 +222,7 @@
 
       Bus.prototype._buildLegs = function() {
         var _this = this;
+
         if (this.legs) {
           $.each(this.legs, function(_, leg) {
             return leg.destroy();
@@ -215,6 +230,7 @@
         }
         return $.map(this.$el.find('li'), function(legEl, i) {
           var $legEl, data, leg;
+
           $legEl = $(legEl);
           data = $legEl.data();
           leg = new Leg({
@@ -254,7 +270,6 @@
 
     })();
     Leg = (function() {
-
       function Leg(options) {
         this.bus = options.bus;
         this.rawData = options.rawData;
@@ -275,6 +290,7 @@
 
       Leg.prototype.render = function() {
         var arrowClass, html;
+
         arrowClass = this.options.orientation === 'centered' ? '' : 'tourbus-arrow';
         this.$el.addClass(" " + arrowClass + " tourbus-arrow-" + this.options.orientation + " ");
         html = "<div class='tourbus-leg-inner'>\n  " + this.content + "\n</div>";
@@ -289,8 +305,15 @@
         return this._teardownEvents();
       };
 
+      Leg.prototype.refreshPosition = function() {
+        this._configureTarget();
+        this._configureScroll();
+        return this.position();
+      };
+
       Leg.prototype.position = function() {
         var css, keys, rule, selector;
+
         if (this.options.orientation !== 'centered') {
           rule = {};
           keys = {
@@ -337,6 +360,7 @@
 
       Leg.prototype.scrollIntoView = function() {
         var scrollTarget;
+
         if (!this.willScroll) {
           return;
         }
@@ -347,6 +371,7 @@
 
       Leg.prototype._setupOptions = function() {
         var globalOptions;
+
         globalOptions = this.bus.options.leg;
         this.options.top = _dataProp(this.rawData.top, globalOptions.top);
         this.options.left = _dataProp(this.rawData.left, globalOptions.left);
@@ -406,6 +431,7 @@
 
       Leg.prototype._offsets = function() {
         var dimension, elHalf, elHeight, elWidth, offsets, targetHalf, targetHeightOverride, validOrientations;
+
         elHeight = this.$el.height();
         elWidth = this.$el.width();
         offsets = {};
@@ -477,6 +503,7 @@
     _busses = {};
     _assemble = function() {
       var bus;
+
       bus = (function(func, args, ctor) {
         ctor.prototype = func.prototype;
         var child = new ctor, result = func.apply(child, args);
@@ -496,9 +523,11 @@
     };
     return _addRule = (function(styleTag) {
       var sheet;
+
       sheet = document.head.appendChild(styleTag).sheet;
       return function(selector, css) {
         var propText;
+
         propText = $.map(Object.keys(css), function(p) {
           return "" + p + ":" + css[p];
         }).join(';');
