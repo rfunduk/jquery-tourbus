@@ -360,13 +360,24 @@
     return possiblyFalsy
 
   _include = ( value, array ) ->
-    (array||[]).indexOf( value ) != -1
+    $.inArray( value, array || [] ) != -1
 
   _addRule = (( styleTag ) ->
-    sheet = document.head.appendChild(styleTag).sheet
+    styleTag.type = 'text/css'
+    document.getElementsByTagName('head')[0].appendChild( styleTag )
+    sheet = document.styleSheets[document.styleSheets.length - 1]
+
     return ( selector, css ) ->
-      propText = $.map( Object.keys(css), ( p ) -> "#{p}:#{css[p]}" ).join(';')
-      sheet.insertRule( "#{selector} { #{propText} }", sheet.cssRules.length )
+      propText = $.map( (key for key of css),
+                        ( p ) -> "#{p}:#{css[p]}" ).join(';')
+      try
+        if sheet.insertRule
+          sheet.insertRule( "#{selector} { #{propText} }",
+                            (sheet.cssRules || sheet.rules).length )
+        else
+          sheet.addRule( selector, propText )
+
+      return
   )( document.createElement('style') )
 
 )( jQuery )

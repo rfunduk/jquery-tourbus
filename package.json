@@ -1,6 +1,6 @@
 {
   "name": "jquery-tourbus",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Ryan Funduk <ryan.funduk@gmail.com>",
   "description": "A 'less-is-more' style jQuery plugin for making web app tours.",
   "repository": {

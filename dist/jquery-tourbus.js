@@ -505,17 +505,32 @@
       return possiblyFalsy;
     };
     _include = function(value, array) {
-      return (array || []).indexOf(value) !== -1;
+      return $.inArray(value, array || []) !== -1;
     };
     return _addRule = (function(styleTag) {
       var sheet;
-      sheet = document.head.appendChild(styleTag).sheet;
+      styleTag.type = 'text/css';
+      document.getElementsByTagName('head')[0].appendChild(styleTag);
+      sheet = document.styleSheets[document.styleSheets.length - 1];
       return function(selector, css) {
-        var propText;
-        propText = $.map(Object.keys(css), function(p) {
+        var key, propText;
+        propText = $.map((function() {
+          var _results;
+          _results = [];
+          for (key in css) {
+            _results.push(key);
+          }
+          return _results;
+        })(), function(p) {
           return "" + p + ":" + css[p];
         }).join(';');
-        return sheet.insertRule("" + selector + " { " + propText + " }", sheet.cssRules.length);
+        try {
+          if (sheet.insertRule) {
+            sheet.insertRule("" + selector + " { " + propText + " }", (sheet.cssRules || sheet.rules).length);
+          } else {
+            sheet.addRule(selector, propText);
+          }
+        } catch (_error) {}
       };
     })(document.createElement('style'));
   })(jQuery);
