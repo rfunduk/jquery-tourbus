@@ -69,7 +69,8 @@
       @options = options
       @currentLegIndex = null
       @legs = null
-      @totalLegs = @$el.find('li').length
+      @legEls = @$el.children('li')
+      @totalLegs = @legEls.length
       @_setupEvents()
 
       @$el.trigger('depart.tourbus') if @options.autoDepart
@@ -141,7 +142,7 @@
 
       # build all legs
       $.map(
-        @$el.find('li')
+        @legEls,
         ( legEl, i ) =>
           $legEl = $(legEl)
           data = $legEl.data()

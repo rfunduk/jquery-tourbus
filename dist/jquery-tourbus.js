@@ -111,7 +111,8 @@
         this.options = options;
         this.currentLegIndex = null;
         this.legs = null;
-        this.totalLegs = this.$el.find('li').length;
+        this.legEls = this.$el.children('li');
+        this.totalLegs = this.legEls.length;
         this._setupEvents();
         if (this.options.autoDepart) {
           this.$el.trigger('depart.tourbus');
@@ -221,7 +222,7 @@
             return leg.destroy();
           });
         }
-        return $.map(this.$el.find('li'), function(legEl, i) {
+        return $.map(this.legEls, function(legEl, i) {
           var $legEl, data, leg;
           $legEl = $(legEl);
           data = $legEl.data();
