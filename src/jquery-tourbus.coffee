@@ -55,6 +55,7 @@
       margin: 10
       top: null
       left: null
+      zindex: 9999
       arrow: "50%"
 
   ### Internal ###
@@ -205,7 +206,7 @@
           #{@content}
         </div>
       """
-      @$el.css( width: @options.width ).html( html )
+      @$el.css( width: @options.width, zIndex: @options.zindex ).html( html )
       return @
 
     destroy: ->
@@ -232,7 +233,7 @@
       @$el.css css
 
     show: ->
-      @$el.css visibility: 'visible', opacity: 1.0, zIndex: 9999
+      @$el.css visibility: 'visible', opacity: 1.0, zIndex: @options.zindex
       @scrollIntoView()
     hide: ->
       if @bus.options.debug
@@ -257,6 +258,7 @@
       @options.arrow = @rawData.arrow || globalOptions.arrow
       @options.align = @rawData.align || globalOptions.align
       @options.width = @rawData.width || globalOptions.width
+      @options.zindex = @rawData.zindex || globalOptions.zindex
       @options.orientation = @rawData.orientation || globalOptions.orientation
 
     _configureElement: ->
@@ -264,7 +266,7 @@
       @$el = $("<div class='tourbus-leg'></div>")
       @el = @$el[0]
       @$el.attr( id: @id )
-      @$el.css( zIndex: 9999 )
+      @$el.css( zIndex: @options.zindex )
 
     _setupEvents: ->
       @$el.on 'click', '.tourbus-next', $.proxy( @bus.next, @bus )

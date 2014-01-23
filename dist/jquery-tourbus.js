@@ -93,6 +93,7 @@
         margin: 10,
         top: null,
         left: null,
+        zindex: 9999,
         arrow: "50%"
       }
     };
@@ -288,7 +289,8 @@
         this.$el.addClass(" " + arrowClass + " tourbus-arrow-" + this.options.orientation + " ");
         html = "<div class='tourbus-leg-inner'>\n  " + this.content + "\n</div>";
         this.$el.css({
-          width: this.options.width
+          width: this.options.width,
+          zIndex: this.options.zindex
         }).html(html);
         return this;
       };
@@ -330,7 +332,7 @@
         this.$el.css({
           visibility: 'visible',
           opacity: 1.0,
-          zIndex: 9999
+          zIndex: this.options.zindex
         });
         return this.scrollIntoView();
       };
@@ -371,6 +373,7 @@
         this.options.arrow = this.rawData.arrow || globalOptions.arrow;
         this.options.align = this.rawData.align || globalOptions.align;
         this.options.width = this.rawData.width || globalOptions.width;
+        this.options.zindex = this.rawData.zindex || globalOptions.zindex;
         return this.options.orientation = this.rawData.orientation || globalOptions.orientation;
       };
 
@@ -382,7 +385,7 @@
           id: this.id
         });
         return this.$el.css({
-          zIndex: 9999
+          zIndex: this.options.zindex
         });
       };
 
