@@ -455,6 +455,9 @@ $(document).ready( function() {
     // width of leg
     width: 'auto',
 
+    // z-index of the leg
+    zindex: 9999,
+
     // space between leg and target
     margin: 10,
 
@@ -556,6 +559,12 @@ $(document).ready( function() {
                   (if applicable). Defaults to '50%' and can be any
                   valid CSS value. If you only pass in a number, it
                   will assume pixels.
+                </td>
+              </tr>
+              <tr>
+                <th><tt>data-zindex</tt></th>
+                <td>
+                  Specify the z-index of the leg. This is useful if you have other element and you want them to be either on top or behind them. 
                 </td>
               </tr>
             </table>
