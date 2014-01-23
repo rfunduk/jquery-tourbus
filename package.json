@@ -1,6 +1,6 @@
 {
   "name": "jquery-tourbus",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "Ryan Funduk <ryan.funduk@gmail.com>",
   "description": "A 'less-is-more' style jQuery plugin for making web app tours.",
   "repository": {
@@ -20,7 +20,7 @@
     "grunt-contrib-copy": "~0.4.0",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-rsync": "~0.1.0",
-    "grunt-mocha": "~0.3.0"
+    "grunt-mocha": "~0.4.10"
   },
   "license": "MIT",
   "engines": {

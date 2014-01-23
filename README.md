@@ -31,7 +31,7 @@ This project uses grunt plus an npm `package.json` for development
 (the plugin itself is not on npm). That means you can hack on it by forking
 the repo and:
 
-    $ npm install -g grunt
+    $ npm install -g grunt-cli
     $ git clone git@github.com:<you>/jquery-tourbus.git
     $ cd jquery-tourbus
     $ npm install
