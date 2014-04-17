@@ -97,11 +97,9 @@
         arrow: "50%"
       }
     };
-    /* Internal
-    */
+    /* Internal*/
 
     Bus = (function() {
-
       function Bus(el, options) {
         this.id = uniqueId();
         this.$target = $(options.target);
@@ -172,10 +170,12 @@
           index = this.currentLegIndex;
         }
         leg = this.legs[index];
-        this._log('hideLeg:', leg);
-        preventDefault = this.options.onLegEnd(leg, this);
-        if (preventDefault !== false) {
-          return leg.hide();
+        if (leg.visible) {
+          this._log('hideLeg:', leg);
+          preventDefault = this.options.onLegEnd(leg, this);
+          if (preventDefault !== false) {
+            return leg.hide();
+          }
         }
       };
 
@@ -264,7 +264,6 @@
 
     })();
     Leg = (function() {
-
       function Leg(options) {
         this.bus = options.bus;
         this.rawData = options.rawData;
@@ -272,6 +271,7 @@
         this.index = options.index;
         this.options = options;
         this.$target = $(options.target);
+        this.visible = false;
         if (this.$target.length === 0) {
           throw "" + this.$target.selector + " is not an element!";
         }
@@ -329,6 +329,7 @@
       };
 
       Leg.prototype.show = function() {
+        this.visible = true;
         this.$el.css({
           visibility: 'visible',
           opacity: 1.0,
@@ -338,6 +339,7 @@
       };
 
       Leg.prototype.hide = function() {
+        this.visible = false;
         if (this.bus.options.debug) {
           return this.$el.css({
             visibility: 'visible',

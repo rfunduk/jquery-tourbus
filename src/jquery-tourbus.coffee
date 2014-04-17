@@ -110,9 +110,10 @@
     hideLeg: ( index ) ->
       index ?= @currentLegIndex
       leg = @legs[index]
-      @_log 'hideLeg:', leg
-      preventDefault = @options.onLegEnd( leg, @ )
-      leg.hide() if preventDefault != false
+      if leg.visible
+        @_log 'hideLeg:', leg
+        preventDefault = @options.onLegEnd( leg, @ )
+        leg.hide() if preventDefault != false
 
     # refresh on-screen positions of all legs (can be used after window resize)
     repositionLegs: ->
@@ -184,6 +185,7 @@
       @index = options.index
       @options = options
       @$target = $(options.target)
+      @visible = false
 
       if @$target.length == 0
         throw "#{@$target.selector} is not an element!"
@@ -233,9 +235,11 @@
       @$el.css css
 
     show: ->
+      @visible = true
       @$el.css visibility: 'visible', opacity: 1.0, zIndex: @options.zindex
       @scrollIntoView()
     hide: ->
+      @visible = false
       if @bus.options.debug
         @$el.css visibility: 'visible', opacity: 0.4, zIndex: 0
       else
