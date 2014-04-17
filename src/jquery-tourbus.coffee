@@ -150,6 +150,7 @@
           data = $legEl.data()
 
           leg = new Leg(
+            $orig: $legEl
             content: $legEl.html()
             target: data.el || 'body'
             bus: @
@@ -181,6 +182,7 @@
     constructor: ( options ) ->
       @bus = options.bus
       @rawData = options.rawData
+      @$orig = options.$orig
       @content = options.content
       @index = options.index
       @options = options
