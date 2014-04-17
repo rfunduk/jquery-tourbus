@@ -268,8 +268,9 @@
       @options.orientation = @rawData.orientation || globalOptions.orientation
 
     _configureElement: ->
+      busClasses = ( @bus.$el.attr('class') || '' ).replace('tourbus-legs', '')
       @id = "tourbus-leg-id-#{@bus.id}-#{@options.index}"
-      @$el = $("<div class='tourbus-leg'></div>")
+      @$el = $("<div class='tourbus-leg'></div>").addClass(busClasses).addClass(@$orig.attr('class'))
       @el = @$el[0]
       @$el.attr( id: @id )
       @$el.css( zIndex: @options.zindex )
