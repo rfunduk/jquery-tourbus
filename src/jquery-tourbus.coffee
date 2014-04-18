@@ -150,6 +150,7 @@
           data = $legEl.data()
 
           leg = new Leg(
+            $orig: $legEl
             content: $legEl.html()
             target: data.el || 'body'
             bus: @
@@ -181,6 +182,7 @@
     constructor: ( options ) ->
       @bus = options.bus
       @rawData = options.rawData
+      @$orig = options.$orig
       @content = options.content
       @index = options.index
       @options = options
@@ -266,8 +268,9 @@
       @options.orientation = @rawData.orientation || globalOptions.orientation
 
     _configureElement: ->
+      busClasses = ( @bus.$el.attr('class') || '' ).replace('tourbus-legs', '')
       @id = "tourbus-leg-id-#{@bus.id}-#{@options.index}"
-      @$el = $("<div class='tourbus-leg'></div>")
+      @$el = $("<div class='tourbus-leg'></div>").addClass(busClasses).addClass(@$orig.attr('class'))
       @el = @$el[0]
       @$el.attr( id: @id )
       @$el.css( zIndex: @options.zindex )

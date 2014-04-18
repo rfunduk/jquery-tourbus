@@ -228,6 +228,7 @@
           $legEl = $(legEl);
           data = $legEl.data();
           leg = new Leg({
+            $orig: $legEl,
             content: $legEl.html(),
             target: data.el || 'body',
             bus: _this,
@@ -267,6 +268,7 @@
       function Leg(options) {
         this.bus = options.bus;
         this.rawData = options.rawData;
+        this.$orig = options.$orig;
         this.content = options.content;
         this.index = options.index;
         this.options = options;
@@ -380,8 +382,10 @@
       };
 
       Leg.prototype._configureElement = function() {
+        var busClasses;
+        busClasses = (this.bus.$el.attr('class') || '').replace('tourbus-legs', '');
         this.id = "tourbus-leg-id-" + this.bus.id + "-" + this.options.index;
-        this.$el = $("<div class='tourbus-leg'></div>");
+        this.$el = $("<div class='tourbus-leg'></div>").addClass(busClasses).addClass(this.$orig.attr('class'));
         this.el = this.$el[0];
         this.$el.attr({
           id: this.id
