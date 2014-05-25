@@ -66,3 +66,4 @@ branch instead of master.
 
 - [Ryan Funduk](https://github.com/rfunduk)
 - [Gary Taylor](https://github.com/henrythewasp)
+- [Joshua Jabbour](https://github.com/joshuajabbour)

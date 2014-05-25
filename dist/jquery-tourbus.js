@@ -97,9 +97,11 @@
         arrow: "50%"
       }
     };
-    /* Internal*/
+    /* Internal
+    */
 
     Bus = (function() {
+
       function Bus(el, options) {
         this.id = uniqueId();
         this.$target = $(options.target);
@@ -264,6 +266,7 @@
 
     })();
     Leg = (function() {
+
       function Leg(options) {
         this.bus = options.bus;
         this.rawData = options.rawData;

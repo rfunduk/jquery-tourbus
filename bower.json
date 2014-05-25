@@ -1,0 +1,28 @@
+{
+  "name": "jquery-tourbus",
+  "version": "0.3.3",
+  "homepage": "https://github.com/rfunduk/jquery-tourbus",
+  "authors": [
+    "Ryan Funduk <ryan.funduk@gmail.com>"
+  ],
+  "dependencies": {
+    "jquery": ">= 1.8"
+  },
+  "description": "A 'less-is-more' style jQuery plugin for making web app tours.",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "jquery",
+    "tour"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "site",
+    "Gruntfile.js"
+  ]
+}

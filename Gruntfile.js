@@ -93,10 +93,18 @@ var config = {
   copy: {
     dist: {
       files: [
+        // jquery via bower_components
+        {
+          expand: true,
+          cwd: 'bower_components/jquery/dist',
+          src: [ 'jquery.min.js' ],
+          dest: 'site/deps/'
+        },
+        // copy build
         {
           expand: true,
           cwd: 'dist/',
-          src: [ '**/*.min.*' ],
+          src: [ '*.min.*' ],
           dest: 'site/'
         }
       ]
