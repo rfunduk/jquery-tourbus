@@ -23,7 +23,7 @@ module.exports = function( grunt ) {
   ] );
 
   grunt.registerTask( 'test', [
-    'build', 'coffee:test', 'mocha'
+    'build', 'copy', 'coffee:test', 'mocha'
   ] );
 
   grunt.registerTask( 'deploy', [
