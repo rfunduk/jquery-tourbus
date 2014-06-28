@@ -11,7 +11,7 @@ describe '$.tourbus build', ->
     validId = '#tourbus-test-1'
 
     ctors.forEach ( ctor ) ->
-      describe "built with #{ctor.name}", ->
+      describe "built with '#{ctor.name}'", ->
         it 'should not error', ->
           assert.doesNotThrow -> ctor.fn( validId )
           assert.doesNotThrow -> ctor.fn( $(validId) )

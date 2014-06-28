@@ -15,8 +15,8 @@
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
 
     <script src='deps/jquery.min.js'></script>
-    <script src='deps/jquery-imagesloaded.js'></script>
-    <script src='deps/jquery-scrollto.js'></script>
+    <script src='deps/imagesloaded.pkgd.min.js'></script>
+    <script src='deps/jquery.scrollTo.min.js'></script>
     <script src='jquery-tourbus.min.js'></script>
 
     <script src='highlight.js'></script>
@@ -37,15 +37,18 @@
         </div>
 
         <p>
-          Holy crap it is definitely <em>yet another</em> jQuery
-          tour/walkthrough plugin! And, are you sitting down?,
-          it's written in
-          <a id='link' href='http://coffeescript.org' target='_blank'>CoffeeScript</a>!
-          Arrrggg!
+          Holy crap it is definitely <em>yet another</em>
+          <a id='link' href='http://coffeescript.org' target='_blank'>jQuery</a>
+          tour/walkthrough plugin!
         </p>
 
         <p>
-          Well, too bad for you! I wanted a simpler, less things-happen-automatically
+          Current Version:
+          <a href='https://github.com/rfunduk/jquery-tourbus/blob/master/CHANGELOG.md'><strong>0.4.0</strong></a>
+        </p>
+
+        <p>
+          I wanted a simpler, less things-happen-automatically
           toolkit for making tours. If I need auto-advance/progress between 'legs'
           (<small>get it, legs of the tour :)</small>) I just need some callbacks where
           I can write my <tt>setTimeout</tt>s. If I want to highlight some elements,
@@ -232,7 +235,7 @@
             </p>
 
             <script class='highlight' data-language='javascript' type='text/highlight'>
-$(document).ready( function() {
+$(window).load( function() {
   var tour = $('#my-tour-id').tourbus( {} );
 } );
             </script>
@@ -286,7 +289,7 @@ tour.data('tourbus').depart();
             </p>
 
             <script class='highlight' data-language='javascript' type='text/highlight'>
-$(document).ready( function() {
+$(window).load( function() {
   var tour = $.tourbus( '#my-tour-id', {} );
   //  or:    $.tourbus( $('#my-tour-id'), {} );
   //  or:    $.tourbus( 'build', '#my-tour-id', {} );
@@ -425,6 +428,9 @@ $(document).ready( function() {
   // the depart-point of the tour
   startAt: 0,
 
+  // a class to apply to the tour container
+  class: '',
+
   // called when the tour starts
   onDepart: function( tourbus ) {},
   // called when the tour is stopped for any reason
@@ -442,6 +448,9 @@ $(document).ready( function() {
     scrollSpeed: 150,
     // how much space to leave above the leg when scrolled to
     scrollContext: 100,
+
+    // a class to apply to every leg... more useful as a per-leg setting
+    class: '',
 
     // position of leg in relation to target
     // supports top/right/bottom/left
@@ -517,6 +526,10 @@ $(document).ready( function() {
                 <td>How much space to leave above the leg when scrolled to (if scrolled to).</td>
               </tr>
               <tr>
+                <th><tt>data-class</tt></th>
+                <td>A class to give this leg.</td>
+              </tr>
+              <tr>
                 <th><tt>data-orientation</tt></th>
                 <td>
                   Position of this leg in relation to its target.
@@ -571,6 +584,57 @@ $(document).ready( function() {
                 </td>
               </tr>
             </table>
+
+            <p>
+              Likewise, you can set <tt>data-*</tt> attributes on the
+              containing <tt>ol</tt> instead of setting the options in your code:
+            </p>
+
+            <table class='docs'>
+              <tr>
+                <th width='25%'><tt>data-debug</tt></th>
+                <td>
+                  Makes the tour logging more verbose.
+                </td>
+              </tr>
+              <tr>
+                <th width='25%'><tt>data-auto-depart</tt></th>
+                <td>
+                  Automatically starts the tour right away.
+                </td>
+              </tr>
+              <tr>
+                <th width='25%'><tt>data-start-at</tt></th>
+                <td>
+                  Which leg to start on. Normally this is <tt>0</tt>,
+                  but sometimes you might want to have a back-and-forth thing
+                  going on where you start in the middle, or show the first
+                  two legs on init, etc.
+                </td>
+              </tr>
+              <tr>
+                <th width='25%'><tt>data-container</tt></th>
+                <td>
+                  The jQuery selector of the element that this
+                  tour will be added to. An element with a class of
+                  <tt>tourbus-container</tt> and a unique id will be added.
+                </td>
+              </tr>
+              <tr>
+                <th width='25%'><tt>data-class</tt></th>
+                <td>
+                  A class to add to the tour container element.
+                  Whatever you specify here, it will always have a class of
+                  <tt>tourbus-container</tt> which might suffice for most
+                  styling requirements.
+                </td>
+              </tr>
+            </table>
+
+            <p>
+              <em>Note:</em> At the moment the callbacks (eg, <tt>onDepart</tt>)
+              need to be implemented in code, not as data attributes.
+            </p>
 
             <h2>Miscellaneous</h2>
             <p>
@@ -695,7 +759,7 @@ tourbus.on( 'click', 'selector', function() {
             </p>
 
             <script class='highlight' data-language='javascript' type='text/highlight'>
-$(document).ready( function() {
+$(window).load( function() {
   $('img').imagesLoaded( function() {
     $('#my-tour-id').tourbus( {} );
   } );
@@ -723,9 +787,7 @@ $(document).ready( function() {
             <p>
               The first thing you need to know is that <tt>data-*</tt>
               attributes unused/unknown to TourBus will be available on
-              your legs as <tt>rawData</tt>. Also anything passed into
-              a TourBus constructor that is unrecognized will be
-              available as <tt>options</tt>.
+              your legs and the tour itself as <tt>rawData</tt>.
             </p>
 
             <p>
@@ -768,6 +830,12 @@ $(document).ready( function() {
                 </td>
               </tr>
               <tr>
+                <th><tt>rawData</tt></th>
+                <td>
+                  All <tt>data-*</tt> attributes used on the top-level <tt>ol</tt>.
+                </td>
+              </tr>
+              <tr>
                 <th><tt>running</tt></th>
                 <td>Whether this tour is running or not right now.</td>
               </tr>
@@ -775,20 +843,31 @@ $(document).ready( function() {
                 <th><tt>legs</tt></th>
                 <td>
                   An array of <tt>Leg</tt> instances, in the order
-                  they were defined in the DOM. <small><strong>Note:</strong>
-                  The legs are not actually inserted until departure.</small>
+                  they were defined in the DOM.
+                  <small>
+                    <strong>Note:</strong>
+                    The legs are not actually inserted all at once, but on demand.
+                    A leg will be built and inserted if it is requested to be shown
+                    or it is coming up next (<tt>currentLegIndex+1</tt>). You generally
+                    don't need to build legs by hand because an unbuilt leg is detected
+                    and handled in <tt>showLeg</tt>. If you must build a leg by hand,
+                    call <tt>buildLeg(index)</tt> on a <tt>Bus</tt>.
+                  </small>
                 </td>
               </tr>
               <tr>
-                <th><tt>$target</tt></th>
+                <th><tt>$container</tt></th>
                 <td>
-                  jQuery wrapped element where the legs have
-                  been inserted. <small><strong>Note:</strong>
-                  The legs are not actually inserted until departure.</small>
+                  jQuery wrapped element where the legs will
+                  be inserted. <small><strong>Note:</strong>
+                  As above, legs are lazily instantiated/inserted, so
+                  don't expect to find everything in here (eg, to target
+                  an element in a leg for something) until it's been built by
+                  hand or by being shown.</small>
                 </td>
               </tr>
               <tr>
-                <th><tt>$el</tt></th>
+                <th><tt>$original</tt></th>
                 <td>
                   jQuery wrapped element which contains
                   the steps. This is the original element you
@@ -821,6 +900,10 @@ $(document).ready( function() {
                 <td>The leg element in the DOM.</td>
               </tr>
               <tr>
+                <th><tt>$original</tt></th>
+                <td>The original leg definition element.</td>
+              </tr>
+              <tr>
                 <th><tt>content</tt></th>
                 <td>The innerHTML content of this leg.</td>
               </tr>
@@ -831,7 +914,7 @@ $('#my-tour').tourbus( {
   customProp: 5,
   onLegStart: function( leg, bus ) {
     console.log( "Leg", leg.index, ":", leg.rawData );
-    console.log( "TourBus customProp:", bus.options.customProp );
+    console.log( "TourBus customProp:", bus.rawData.customProp );
   }
 } );
             </script>

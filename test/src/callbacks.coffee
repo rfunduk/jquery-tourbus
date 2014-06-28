@@ -36,4 +36,4 @@ describe 'Bus callbacks', ->
       @tour.depart()
       assert.equal @onLegEnd, 0
       @tour.next()
-      assert.equal @onLegEnd, 1, "#{@tour.id} had too many leg ends"
+      assert.equal @onLegEnd, 1, "#{@tour.elId} had too many leg ends"

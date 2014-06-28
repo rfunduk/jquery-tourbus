@@ -1,17 +1,19 @@
 describe 'Bus#destroy', ->
   beforeEach ->
-    @tour = $.tourbus '#tourbus-test-1'
-    @tour.depart()
+    @bus = $.tourbus '#tourbus-test-1'
+    @bus.depart()
 
   describe 'when destroyed', ->
     beforeEach ->
-      @totalLegs = @tour.totalLegs
-      @id = @tour.id
-      @tour.destroy()
+      @totalLegs = @bus.totalLegs
+      @busId = @bus.id
+      @bus.destroy()
 
     it 'should not have any legs', ->
-      assert.isNull @tour.legs
+      assert.lengthOf @bus.legs, 0
+
     it 'should not leave elements in the DOM', ->
+      # bus and legs are destroyed, so build ids by hand here
+      assert.lengthOf $("#tourbus-#{@busId}"), 0, "Bus container still in DOM!"
       for index in Array(@totalLegs)
-        legId = "#tourbus-leg-id-#{@id}-#{index}"
-        assert.lengthOf $("#tourbus-leg-id-#{@id}-#{index}"), 0, "#{legId} still in DOM!"
+        assert.lengthOf $("#tourbus-leg-#{@busId}-#{index}"), 0, "#{@busId}/#{index} still in DOM!"

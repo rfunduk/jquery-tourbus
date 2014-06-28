@@ -3,6 +3,7 @@ module.exports = function( grunt ) {
   grunt.initConfig( config );
 
   grunt.loadNpmTasks( 'grunt-contrib-uglify' );
+  grunt.loadNpmTasks( 'grunt-browserify' );
   grunt.loadNpmTasks( 'grunt-contrib-coffee' );
   grunt.loadNpmTasks( 'grunt-contrib-less' );
   grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
@@ -13,7 +14,7 @@ module.exports = function( grunt ) {
   grunt.loadNpmTasks( 'grunt-contrib-clean' );
 
   grunt.registerTask( 'build', [
-    'coffee:build', 'less:build'
+    'coffee:build', 'browserify', 'less:build'
   ] );
 
   grunt.registerTask( 'dist', [
@@ -36,18 +37,28 @@ module.exports = function( grunt ) {
 var config = {
 
   // SCRIPTS
+  browserify: {
+    dist: {
+      files: {
+        'dist/jquery-tourbus.js': ['.tmp/**/*.js'],
+      }
+    }
+  },
   coffee: {
     build: {
-      files: {
-        'dist/<%= pkg.name %>.js': 'src/<%= pkg.name %>.coffee'
-      }
+      options: { sourceMap: true },
+      expand: true,
+      cwd: 'src',
+      src: ['**/*.coffee'],
+      dest: '.tmp',
+      ext: '.js'
     },
     test: {
       options: { bare: true },
       bare: true,
       expand: true,
       cwd: 'test/src/',
-      src: [ '*.coffee' ],
+      src: [ '**/*.coffee' ],
       dest: 'test/',
       ext: '.js'
     }
@@ -96,17 +107,29 @@ var config = {
         // jquery via bower_components
         {
           expand: true,
-          cwd: 'bower_components/jquery/dist',
-          src: [ 'jquery.min.js' ],
-          dest: 'site/deps/'
+          flatten: true,
+          cwd: 'bower_components',
+          src: [
+            'jquery/dist/jquery.min.js',
+            'imagesloaded-packaged/imagesloaded.pkgd.min.js',
+            'jquery.scrollTo/jquery.scrollTo.min.js'
+          ],
+          dest: 'site/deps'
         },
-        // copy build
+        // copy sourcemap to dist
+        {
+          expand: true,
+          cwd: '.tmp',
+          src: [ '*.map' ],
+          dest: 'dist'
+        },
+        // copy build to site
         {
           expand: true,
           cwd: 'dist/',
-          src: [ '*.min.*' ],
+          src: [ '*' ],
           dest: 'site/'
-        }
+        },
       ]
     }
   },

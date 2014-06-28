@@ -8,9 +8,8 @@ describe 'Bus core', ->
 
       it 'should be running', ->
         assert.ok @tour.running
-      it 'should build its legs', ->
-        assert.isNotNull @tour.legs
-        assert.isArray @tour.legs
+      it 'should build the first 2 legs', ->
+        assert.lengthOf @tour.legs, 2 # first leg + preload second
       it 'should show the first leg', ->
         assert.equal @tour.currentLegIndex, 0
         assert.equal @tour.legs[0].$el.css('visibility'), 'visible'
@@ -21,13 +20,16 @@ describe 'Bus core', ->
       it 'should not be running', ->
         assert.ok !@tour.running
       it 'should not build legs', ->
-        assert.isNull @tour.legs
+        assert.lengthOf @tour.legs, 0
 
   describe 'departing', ->
     beforeEach ->
       @onDepart = false
       @tour = $.tourbus( validId, onDepart: => @onDepart = true )
       @tour.depart()
+
+    it 'should create a container', ->
+      assert.lengthOf $(".tourbus-container##{@tour.elId}"), 1
 
     it 'should show the first leg', ->
       assert.equal @tour.currentLegIndex, 0
@@ -40,10 +42,11 @@ describe 'Bus core', ->
     beforeEach ->
       @tour = $.tourbus( validId )
       @tour.depart()
+      @currentLegIndex = @tour.currentLegIndex
       @tour.stop()
 
     it 'should hide the current leg', ->
-      assert.equal @tour.legs[@tour.currentLegIndex].$el.css('visibility'), 'hidden'
+      assert.equal @tour.legs[@currentLegIndex].$el.css('visibility'), 'hidden'
 
   describe 'navigating', ->
     beforeEach ->
