@@ -73,9 +73,9 @@
                 <td>
                   <a class='button half-bottom' target='_blank' id='coffee-dl' href='https://raw.github.com/rfunduk/jquery-tourbus/master/src/jquery-tourbus.coffee'>coffeescript</a>
                   <br/>
-                  <a class='button half-bottom' target='_blank' id='plain-dl' href='https://github.com/rfunduk/jquery-tourbus/raw/master/dist/jquery-tourbus.js'>javascript (16k)</a>
+                  <a class='button half-bottom' target='_blank' id='plain-dl' href='https://github.com/rfunduk/jquery-tourbus/raw/master/dist/jquery-tourbus.js'>javascript (18k)</a>
                   <br/>
-                  <a class='button half-bottom' target='_blank' id='minified-dl' href='https://raw.github.com/rfunduk/jquery-tourbus/master/dist/jquery-tourbus.min.js'>minified (9k)</a>
+                  <a class='button half-bottom' target='_blank' id='minified-dl' href='https://raw.github.com/rfunduk/jquery-tourbus/master/dist/jquery-tourbus.min.js'>minified (11k)</a>
                 </td>
               </tr>
               <tr class='sep'>
@@ -844,6 +844,7 @@ $(window).load( function() {
                 <td>
                   An array of <tt>Leg</tt> instances, in the order
                   they were defined in the DOM.
+                  <br/>
                   <small>
                     <strong>Note:</strong>
                     The legs are not actually inserted all at once, but on demand.
@@ -859,11 +860,20 @@ $(window).load( function() {
                 <th><tt>$container</tt></th>
                 <td>
                   jQuery wrapped element where the legs will
-                  be inserted. <small><strong>Note:</strong>
+                  be inserted.
+                  <br/>
+                  <small><strong>Note:</strong>
                   As above, legs are lazily instantiated/inserted, so
                   don't expect to find everything in here (eg, to target
                   an element in a leg for something) until it's been built by
                   hand or by being shown.</small>
+                </td>
+              </tr>
+              <tr>
+                <th><tt>$el</tt></th>
+                <td>
+                  The container element for the legs
+                  (inserted into <tt>$container</tt>).
                 </td>
               </tr>
               <tr>
