@@ -1,3 +1,10 @@
+## 0.4.1 (June 30, 2014) ##
+
+*   Update `bower.json` to specify primary endpoints.
+
+    _Bruno Batista_
+
+
 ## 0.4.0 (June 28, 2014) ##
 
 *   Use `browserify` to split up the monolithic `jquery-tourbus.coffee` into
