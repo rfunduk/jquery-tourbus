@@ -5,6 +5,10 @@
   "authors": [
     "Ryan Funduk <ryan.funduk@gmail.com>"
   ],
+  "main": [
+    "./dist/jquery-tourbus.css",
+    "./dist/jquery-tourbus.js"
+  ],
   "dependencies": {
     "jquery": ">= 1.8"
   },
