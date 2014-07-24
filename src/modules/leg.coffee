@@ -80,18 +80,14 @@ module.exports = class Leg
 
   _setupOptions: ->
     globalOptions = @bus.options.leg
-    @options.class = utils.dataProp( @rawData.class, globalOptions.class )
-    @options.top = utils.dataProp( @rawData.top, globalOptions.top )
-    @options.left = utils.dataProp( @rawData.left, globalOptions.left )
-    @options.scrollTo = utils.dataProp( @rawData.scrollTo, globalOptions.scrollTo )
-    @options.scrollSpeed = utils.dataProp( @rawData.scrollSpeed, globalOptions.scrollSpeed )
-    @options.scrollContext = utils.dataProp( @rawData.scrollContext, globalOptions.scrollContext )
-    @options.margin = utils.dataProp( @rawData.margin, globalOptions.margin )
-    @options.arrow = @rawData.arrow || globalOptions.arrow
-    @options.align = @rawData.align || globalOptions.align
-    @options.width = @rawData.width || globalOptions.width
-    @options.zindex = @rawData.zindex || globalOptions.zindex
-    @options.orientation = @rawData.orientation || globalOptions.orientation
+
+    dataProps = [
+      'class', 'top', 'left', 'scrollTo', 'scrollSpeed',
+      'scrollContext', 'margin', 'arrow', 'align', 'width',
+      'zindex', 'orientation'
+    ]
+    _.each dataProps, ( prop ) =>
+      @options[prop] = utils.dataProp( @rawData[prop], globalOptions[prop] )
 
   _configureElement: ->
     @$el = $("<div class='tourbus-leg'></div>")
