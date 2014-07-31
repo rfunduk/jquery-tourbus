@@ -86,7 +86,7 @@ module.exports = class Leg
       'scrollContext', 'margin', 'arrow', 'align', 'width',
       'zindex', 'orientation'
     ]
-    _.each dataProps, ( prop ) =>
+    for prop in dataProps
       @options[prop] = utils.dataProp( @rawData[prop], globalOptions[prop] )
 
   _configureElement: ->
