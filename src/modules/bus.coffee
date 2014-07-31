@@ -115,6 +115,7 @@ module.exports = class Bus
     @legs = []
     delete @constructor._busses[@id]
     @_teardownEvents()
+    @$original.removeData('tourbus')
     @$el.remove()
 
   _configureElement: ->
