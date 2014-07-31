@@ -1,3 +1,18 @@
+## 0.4.2 (July 31, 2014) ##
+
+*   Cleanup leg option handling code.
+
+*   Test additions/updates.
+
+*   Remove tourbus data from original element when destroying tour.
+
+    _Joshua Jabbour_
+
+*   Fix incorrect `target` attribute in docs to be `container`.
+
+    _Joshua Jabbour_
+
+
 ## 0.4.1 (June 30, 2014) ##
 
 *   Update `bower.json` to specify primary endpoints.
