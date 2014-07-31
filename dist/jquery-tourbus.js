@@ -271,6 +271,7 @@
       this.legs = [];
       delete this.constructor._busses[this.id];
       this._teardownEvents();
+      this.$original.removeData('tourbus');
       return this.$el.remove();
     };
 
@@ -421,20 +422,15 @@
     };
 
     Leg.prototype._setupOptions = function() {
-      var globalOptions;
+      var dataProps, globalOptions, prop, _i, _len, _results;
       globalOptions = this.bus.options.leg;
-      this.options["class"] = utils.dataProp(this.rawData["class"], globalOptions["class"]);
-      this.options.top = utils.dataProp(this.rawData.top, globalOptions.top);
-      this.options.left = utils.dataProp(this.rawData.left, globalOptions.left);
-      this.options.scrollTo = utils.dataProp(this.rawData.scrollTo, globalOptions.scrollTo);
-      this.options.scrollSpeed = utils.dataProp(this.rawData.scrollSpeed, globalOptions.scrollSpeed);
-      this.options.scrollContext = utils.dataProp(this.rawData.scrollContext, globalOptions.scrollContext);
-      this.options.margin = utils.dataProp(this.rawData.margin, globalOptions.margin);
-      this.options.arrow = this.rawData.arrow || globalOptions.arrow;
-      this.options.align = this.rawData.align || globalOptions.align;
-      this.options.width = this.rawData.width || globalOptions.width;
-      this.options.zindex = this.rawData.zindex || globalOptions.zindex;
-      return this.options.orientation = this.rawData.orientation || globalOptions.orientation;
+      dataProps = ['class', 'top', 'left', 'scrollTo', 'scrollSpeed', 'scrollContext', 'margin', 'arrow', 'align', 'width', 'zindex', 'orientation'];
+      _results = [];
+      for (_i = 0, _len = dataProps.length; _i < _len; _i++) {
+        prop = dataProps[_i];
+        _results.push(this.options[prop] = utils.dataProp(this.rawData[prop], globalOptions[prop]));
+      }
+      return _results;
     };
 
     Leg.prototype._configureElement = function() {
