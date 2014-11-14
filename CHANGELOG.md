@@ -1,3 +1,9 @@
+## 0.4.3 (November 13, 2014) ##
+
+*   Don't attempt to hide legs which haven't been built yet
+    (regression from the 'lazy building' of legs).
+
+
 ## 0.4.2 (July 31, 2014) ##
 
 *   Cleanup leg option handling code.
