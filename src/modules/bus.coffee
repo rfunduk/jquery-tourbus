@@ -81,7 +81,7 @@ module.exports = class Bus
   hideLeg: ( index ) ->
     index ?= @currentLegIndex
     leg = @legs[index]
-    if leg.visible
+    if leg && leg.visible
       @_log 'hideLeg:', leg
       preventDefault = @options.onLegEnd( leg, @ )
       leg.hide() if preventDefault != false

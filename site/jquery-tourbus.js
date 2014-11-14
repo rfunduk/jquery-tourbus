@@ -226,7 +226,7 @@
         index = this.currentLegIndex;
       }
       leg = this.legs[index];
-      if (leg.visible) {
+      if (leg && leg.visible) {
         this._log('hideLeg:', leg);
         preventDefault = this.options.onLegEnd(leg, this);
         if (preventDefault !== false) {
