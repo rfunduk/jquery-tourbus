@@ -52,7 +52,6 @@ $(document).ready( function() {
     } );
 
     var docsBus = $.tourbus( '#tourbus-demo-2' );
-    $.tourbus( 'build', '#tourbus-demo-3', { autoDepart: true } );
 
     $(document).on( 'click', '.docs-tour, .go-to-docs', function() {
       $('#tourbus-demo-1').trigger('stop.tourbus');

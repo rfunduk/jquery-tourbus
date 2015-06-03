@@ -17,13 +17,13 @@
     <script src='deps/jquery.min.js'></script>
     <script src='deps/imagesloaded.pkgd.min.js'></script>
     <script src='deps/jquery.scrollTo.min.js'></script>
-    <script src='jquery-tourbus.min.js'></script>
+    <script src='jquery-tourbus.js'></script>
 
     <script src='highlight.js'></script>
     <script src='demo.js'></script>
 
     <link href='skeleton.css' media='all' rel='stylesheet' type='text/css' />
-    <link href='jquery-tourbus.min.css' media='all' rel='stylesheet' type='text/css' />
+    <link href='jquery-tourbus.css' media='all' rel='stylesheet' type='text/css' />
     <link href='demo.css' media='all' rel='stylesheet' type='text/css' />
   </head>
   <body>
@@ -113,41 +113,29 @@
           <a href='javascript:void(0);' class='docs-tour'>docs</a> for more on that.
         </p>
 
-        <h4>Motivations</h4>
-        <p>
-          jQuery TourBus does not <em>need</em> to exist, there are so
-          many plugins that do exactly this already, aren't there?
-        </p>
-        <ul id='alternatives' style='margin-right: 200px;'>
-          <li><a href='http://www.zurb.com/playground/jquery-joyride-feature-tour-plugin' class='remove-bottom' target='_blank'>ZURB Foundation Joyride</a></li>
-          <li><a href='http://jquerytour.com/' class='remove-bottom' target='_blank'>jQuery Site Tour</a></li>
-          <li>
-            Actually there are just too many to list, here's 10:<br/>
-            <a href='http://www.jquery4u.com/plugins/web-tour-instructional-plugins/' target='_blank'>10 jQuery web tour, help and instructional plugins</a>...
-          </li>
-        </ul>
-        <p>
-          You know how it is, I just didn't really like them. Either too much configuration
-          in the DOM, or not enough. And, I prefer the simplicity of
-          event-driven APIs. A ton of styles and animation that results in performance
-          problems. All of these things ultimately stem from trying to do too much automatically.
-        </p>
-
         <h4>Shameless Plug</h4>
         <p>
           This plugin was written by me, <a href='http://ryanfunduk.com'>Ryan Funduk</a>, as
-          a weekend project so I could use it in two other side-projects of mine:
-          <a href='https://coursecraft.net' target='_blank'>CourseCraft</a> ('the easiest
-          way to make an e-course and sell it') and
-          <a href='https://bugrocket.com' target='_blank'>Bugrocket</a> ('a lean, hassle-free
-          bug tracker for small dev teams').
+          a weekend project. I've bootstrapped 2 commercial applications
+          (<a href='https://coursecraft.net' target='_blank'>CourseCraft</a> and
+          <a href='https://bugrocket.com' target='_blank'>Bugrocket</a>)
+          and work on tons of other stuff on the side (like this!).
         </p>
         <p>
-          Do me a favor and check them out :)
+          You should subscribe to my (infrequent) newsletter for awesome stuff about
+          software development, bootstrapping products and learning new things!
         </p>
 
-        <a class='start-intro-tour button'>Start the Demo Tour <span>&raquo;</span></a>
+        <form class='list-signup' action='http://list.ryanfunduk.com/t/d/s/jydtjh/' method='post'>
+          <input type='hidden' name='cm-f-adjji' value='ryanfunduk.com/jquery-tourbus' />
+          <input spellcheck='false' placeholder='your@email.com' name='cm-jydtjh-jydtjh' type='email' required='true' /><button type='submit'>Subscribe &check;</button>
+          <small>No spam. Unsubscribe anytime.</small>
+        </form>
 
+        <p style='text-align: center;'>
+          ...or just
+          <a class='start-intro-tour button'>start the demo tour <span>&raquo;</span></a>
+        </p>
 
         <div style='margin-top: 1500px;' id='docs'>
           <h1>Documentation</h1>
@@ -1248,15 +1236,6 @@ $('#my-tour').tourbus( {
           <li data-el='#inner-docs' data-width='500' data-orientation='top' data-margin='15' data-scroll-context='25'>
             <a href='javascript:void(0);' class='button remove-bottom tourbus-next' style='float: right; margin-top: 8px;'>I'm ecstatic.</a>
             <h2 class='remove-bottom'>Documentation</h2>
-          </li>
-        </ol>
-
-        <ol class='tourbus-legs' id='tourbus-demo-3'>
-          <li data-el='#alternatives' data-width='280' data-orientation='right' data-align='bottom' data-scroll-to='false' data-margin='0'>
-            <h4 class='remove-bottom'>Alternatives!</h4>
-            <p class='remove-bottom'>
-              Don't get me wrong, some of these tour plugins are good!
-            </p>
           </li>
         </ol>
       </div>

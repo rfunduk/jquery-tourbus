@@ -310,3 +310,52 @@ pre .diff .change {
 pre .chunk {
   color: #aaa
 }
+
+/* newsletter signup */
+
+.list-signup {
+  text-align: center;
+}
+
+.list-signup input {
+  height: 70px;
+  width: auto;
+  padding: 0 18px;
+  font-size: 30px;
+  font-weight: 200;
+  border: 1px solid #DDD;
+  border-radius: 2px;
+  float: none;
+  display: inline;
+  width: 300px;
+  margin: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.list-signup button {
+  vertical-align: top;
+  font-size: 24px;
+  height: 72px;
+  padding: 0 20px;
+  border: 1px solid #DDD;
+  background: #F6F6F6;
+  color: #6c00d3;
+  border-radius: 2px;
+  margin-top: 10px;
+  float: none;
+  width: auto; margin: 0;
+  border-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.list-signup button:hover {
+  color: #4b00ac;
+  background: #fafafa;
+}
+
+.list-signup small {
+  display: block;
+  font-size: 14px;
+  margin-top: 6px;
+  color: #BBB;
+}

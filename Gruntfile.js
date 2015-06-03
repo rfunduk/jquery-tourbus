@@ -10,7 +10,6 @@ module.exports = function( grunt ) {
   grunt.loadNpmTasks( 'grunt-mocha' );
   grunt.loadNpmTasks( 'grunt-contrib-watch' );
   grunt.loadNpmTasks( 'grunt-contrib-copy' );
-  grunt.loadNpmTasks( 'grunt-rsync' );
   grunt.loadNpmTasks( 'grunt-contrib-clean' );
 
   grunt.registerTask( 'build', [
@@ -18,17 +17,13 @@ module.exports = function( grunt ) {
   ] );
 
   grunt.registerTask( 'dist', [
-    'build',
+    'clean', 'build',
     'uglify:dist', 'cssmin:dist',
     'copy'
   ] );
 
   grunt.registerTask( 'test', [
     'build', 'copy', 'coffee:test', 'mocha'
-  ] );
-
-  grunt.registerTask( 'deploy', [
-    'clean', 'dist', 'rsync'
   ] );
 
   grunt.registerTask( 'default', [ 'clean', 'test', 'watch' ] );
@@ -131,18 +126,6 @@ var config = {
           dest: 'site/'
         },
       ]
-    }
-  },
-
-  // DEPLOY
-  rsync: {
-    deploy: {
-      src: 'site/',
-      dest: '/var/www/rf/<%= pkg.name %>/',
-      host: 'ryanfunduk.com',
-      recursive: true,
-      syncDest: true,
-      args: [ '--verbose' ]
     }
   },
 
