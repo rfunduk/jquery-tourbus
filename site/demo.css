@@ -313,49 +313,93 @@ pre .chunk {
 
 /* newsletter signup */
 
-.list-signup {
-  text-align: center;
-}
-
-.list-signup input {
-  height: 70px;
-  width: auto;
-  padding: 0 18px;
-  font-size: 30px;
-  font-weight: 200;
-  border: 1px solid #DDD;
-  border-radius: 2px;
-  float: none;
-  display: inline;
-  width: 300px;
-  margin: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-}
-.list-signup button {
-  vertical-align: top;
-  font-size: 24px;
-  height: 72px;
-  padding: 0 20px;
-  border: 1px solid #DDD;
-  background: #F6F6F6;
-  color: #6c00d3;
-  border-radius: 2px;
-  margin-top: 10px;
-  float: none;
-  width: auto; margin: 0;
-  border-left: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.list-signup button:hover {
-  color: #4b00ac;
-  background: #fafafa;
-}
-
-.list-signup small {
+form.list-signup {
+  margin-bottom: 10px;
+  float: left;
   display: block;
-  font-size: 14px;
-  margin-top: 6px;
-  color: #BBB;
+  margin-right: 2.35765%;
+  width: 100%;
+  text-align: center; }
+form.list-signup * {
+  box-sizing: border-box;
 }
+  form.list-signup:last-child {
+    margin-right: 0; }
+  form.list-signup .fields-container {
+    text-align: center;
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 100%; }
+    form.list-signup .fields-container:last-child {
+      margin-right: 0; }
+    @media screen and (min-width: 1025px) {
+      form.list-signup .fields-container {
+        text-align: right;
+        float: left;
+        display: block;
+        margin-right: 2.35765%;
+        width: 57.35098%; }
+        form.list-signup .fields-container:last-child {
+          margin-right: 0; } }
+  form.list-signup .button-container {
+    text-align: center;
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 100%; }
+    form.list-signup .button-container:last-child {
+      margin-right: 0; }
+    @media screen and (min-width: 1025px) {
+      form.list-signup .button-container {
+        text-align: left;
+        float: left;
+        display: block;
+        margin-right: 2.35765%;
+        width: 40.29137%;
+        margin-top: 26px; }
+        form.list-signup .button-container:last-child {
+          margin-right: 0; } }
+  form.list-signup input {
+    height: 64px;
+    margin-bottom: 10px;
+    width: auto;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    padding: 0 18px;
+    font-size: 30px;
+    font-weight: 200;
+    border: 1px solid #DDD;
+    border-radius: 2px; }
+  form.list-signup button {
+    vertical-align: top;
+    font-size: 24px;
+    height: 70px;
+    margin-bottom: 4px;
+    padding: 0 35px;
+    border: 1px solid #DDD;
+    background: #F6F6F6;
+    color: #6c00d3;
+    border-radius: 2px; }
+    form.list-signup button:hover {
+      color: #4b00ac;
+      background: #fafafa; }
+  form.list-signup small {
+    display: block;
+    font-size: 14px;
+    margin-top: 6px;
+    color: #BBB; }
+  form.list-signup .button-container {
+    text-align: center; }
+@media screen and (min-width: 1025px) {
+  aside.newsletter-signup {
+    padding: 0 120px; }
+  .prev {
+    float: left;
+    display: block;
+    margin-right: 2.35765%;
+    width: 23.23176%; }
+    .prev:last-child {
+      margin-right: 0; }
