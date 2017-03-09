@@ -576,6 +576,10 @@
 },{"./utils":4}],4:[function(require,module,exports){
 //@ sourceMappingURL=utils.map
 (function() {
+  var $;
+
+  $ = jQuery;
+
   module.exports = {
     dataProp: function(possiblyFalsy, alternative) {
       if (possiblyFalsy === null || typeof possiblyFalsy === 'undefined') {

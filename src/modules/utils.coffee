@@ -1,3 +1,5 @@
+$ = jQuery
+
 module.exports =
   dataProp: ( possiblyFalsy, alternative ) ->
     if possiblyFalsy == null || typeof(possiblyFalsy) == 'undefined'
