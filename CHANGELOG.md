@@ -1,3 +1,9 @@
+## 0.4.4 (March 9, 2017) ##
+
+*   `utils.coffee` didn't assign `$ = jQuery` and thus wouldn't
+    work if you weren't using the `$` alias globally.
+
+
 ## 0.4.3 (November 13, 2014) ##
 
 *   Don't attempt to hide legs which haven't been built yet
